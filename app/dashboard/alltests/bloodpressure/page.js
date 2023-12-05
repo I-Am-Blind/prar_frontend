@@ -1,10 +1,17 @@
 "use client";
 
+import { getSocket } from "@/Socket/socket";
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 
 export default function Page() {
-  const router = useRouter();
+
+  useEffect(() => {
+    const socket = getSocket();
+    socket.emit("bpsensor")
+    socket.on('sensorData', (data) => {
+      console.log('Received sensor data:', data);
+  });
+  }, []);
 
   return (
     <main className="h-screen w-screen py-8 px-4 ">
