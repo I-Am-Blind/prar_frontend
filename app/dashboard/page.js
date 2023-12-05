@@ -91,8 +91,8 @@ export default function Page() {
           <div className="vitals-container col-span-7 h-full">
             <DashboardReadings vitals={['160/140',96,98,37,86]}/>
           </div>
-          <div className="previous-scans col-start-8 row-span-4 row-start-1 flex flex-col gap-8 border-primary border-[1px] h-full rounded-e-xl p-4 ">
-            <span className="flex flex-col gap-2">
+          <button className="previous-scans justify-center items-center col-start-8 row-span-4 row-start-1 flex flex-col gap-4 border-primary border-[1px] h-full rounded-e-xl p-4 ">
+            <span className="flex flex-col gap-4">
             <Image alt="img" src={previous_scans} />
             <h3 className="text-primary font-medium">
               Previous
@@ -100,8 +100,8 @@ export default function Page() {
               Scans
             </h3>
             </span>
-            <button><Image alt="img" src={right_arrow_blue_long}/> </button>
-          </div>
+            <Image alt="img" src={right_arrow_blue_long}/>
+          </button>
         </div>
       </section>
     </main>
