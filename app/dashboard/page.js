@@ -16,6 +16,7 @@ import all_tests_svg from '@/public/assets/all_tests.svg'
 import right_arrow_blue from '@/public/assets/right_arrow_blue.svg'
 import right_arrow_blue_long from '@/public/assets/right_arrow_blue_long.svg'
 import previous_scans from '@/public/assets/previous_scans.svg'
+import Link from "next/link";
 //Assets Import
 
 export default function Page() {
@@ -23,15 +24,10 @@ export default function Page() {
   const [userdata, setuserdata] = useState()
   const [selectedgraph, setselectedgraph] = useState("Daily")
   const buttons = ['Daily', 'Weekly', 'Monthly']
-  const [textmultiplier, settextmultiplier] = useState(userDataManager.get('text-multiplier'))
   
   const handleButtonClick = (value) => {
     setselectedgraph(value);
 };
-
-  useEffect(() => {
-     setuserdata(userDataManager.get())
-  }, []);
 
   return (
     <main className="h-screen w-screen flex flex-col p-4 ">
@@ -82,13 +78,13 @@ export default function Page() {
           </span>
           <h3 className="text-sm font-light">Heart rate & SpO2, Blood pressure, Body temperature </h3>
         </button>
-        <button className="row-span-1 card-1 flex  justify-between">
+        <Link href='/dashboard/alltests' className="row-span-1 card-1 flex  justify-between">
           <span className="flex gap-2 items-center">
             <Image alt="img" src={all_tests_svg}/>
             <h2>Show All Tests</h2>
           </span>
           <Image alt="img" src={right_arrow_blue}/>
-        </button>
+        </Link>
       </section>
       <section className="bottom-section w-full h-[40%] flex justify-center items-center ">
         <div className="card-1 w-full h-[90%] grid grid-cols-8 grid-rows-4 p-0">

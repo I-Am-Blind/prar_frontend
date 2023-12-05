@@ -1,24 +1,19 @@
-export const userDataManager = (() => {
+"use client"
 
-  const get = (key) => {
+export const userDataManager = (() => {
+  const getall = () => {
     const data = localStorage.getItem('userdata');
-    return data ? JSON.parse(data)[key] : null;
+    return data ? JSON.parse(data) : null;
   };
 
-    const getall = () => {
-      const data = localStorage.getItem('userdata');
-      return data ? JSON.parse(data) : null;
-    };
+  const set = (key, value) => {
+    const currentData = getall(); 
+    currentData[key] = value;
+    localStorage.setItem('userdata', JSON.stringify(currentData));
+  };
 
-    const set = (key, value) => {
-      const currentData = get(); 
-      currentData[key] = value;
-      localStorage.setItem('userdata', JSON.stringify(currentData));
-    };
-  
-    return {
-      getall,
-      set,
-      get
-    };
-  })();
+  return {
+    getall,
+    set,
+  };
+})();
