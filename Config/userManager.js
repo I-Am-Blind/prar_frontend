@@ -1,7 +1,13 @@
 export const userDataManager = (() => {
-    const get = () => {
+
+  const get = (key) => {
+    const data = localStorage.getItem('userdata');
+    return data ? JSON.parse(data)[key] : null;
+  };
+
+    const getall = () => {
       const data = localStorage.getItem('userdata');
-      return data ? JSON.parse(data) : {};
+      return data ? JSON.parse(data) : null;
     };
 
     const set = (key, value) => {
@@ -11,7 +17,8 @@ export const userDataManager = (() => {
     };
   
     return {
-      get,
-      set
+      getall,
+      set,
+      get
     };
   })();

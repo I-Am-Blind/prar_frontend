@@ -1,5 +1,6 @@
 import { Inter } from 'next/font/google'
 import '../globals.css'
+import { userDataManager } from "@/Config/userManager";
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -9,6 +10,7 @@ export const metadata = {
 }
 
 export default function RootLayout({ children }) {
+  userDataManager.set("text-multiplier",1)
   return (
       <html lang="en">
       <body className={inter.className}>{children}</body>

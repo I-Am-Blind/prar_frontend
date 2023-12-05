@@ -6,6 +6,8 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useRouter } from 'next/navigation';
+import DashboardReadings from "@/components/DashboardReadings";
+import { DashboardSettings } from "@/components/DashboardSettings";
 
 //Assets Import
 import sensors_svg from '@/public/assets/dash_svg_1.svg'
@@ -14,35 +16,38 @@ import all_tests_svg from '@/public/assets/all_tests.svg'
 import right_arrow_blue from '@/public/assets/right_arrow_blue.svg'
 import right_arrow_blue_long from '@/public/assets/right_arrow_blue_long.svg'
 import previous_scans from '@/public/assets/previous_scans.svg'
-import DashboardReadings from "@/components/DashboardReadings";
 //Assets Import
 
 export default function Page() {
   const router = useRouter()
   const [userdata, setuserdata] = useState()
   const [selectedgraph, setselectedgraph] = useState("Daily")
-  const buttons = ['Daily', 'Weekly', 'Monthly'];
+  const buttons = ['Daily', 'Weekly', 'Monthly']
+  const [textmultiplier, settextmultiplier] = useState(userDataManager.get('text-multiplier'))
   
   const handleButtonClick = (value) => {
     setselectedgraph(value);
 };
+
   useEffect(() => {
      setuserdata(userDataManager.get())
   }, []);
 
   return (
     <main className="h-screen w-screen flex flex-col p-4 ">
-      <section className="top-section w-full h-[20%]"></section>
+      <section className="top-section w-full h-[20%]">
+        <DashboardSettings/>
+      </section>
       <section className="middle-section w-full h-[40%] grid grid-cols-3 grid-rows-3 gap-4">
         <div className="row-span-3 col-span-2 card-1 flex gap-4">
           <div className="h-full w-[60%] flex flex-col items-start justify-center">
-            <span className="w-full flex justify-between items-center  ">
-              <div className="label-1  w-max">Your health score</div>
+            <span className="w-full flex justify-between items-center">
+              <div className="label-1 w-max">Your health score</div>
               <span className="flex gap-1 items-center justify-center">
               {buttons.map((buttonValue) => (
                 <Button 
                     key={buttonValue}
-                    className={`h-6 w-18 text-xs`}
+                    className={`h-6 w-18 text-xs `}
                     variant = {`${selectedgraph === buttonValue ? '' : 'secondary'}`}
                     onClick={() => handleButtonClick(buttonValue)}
                 >
