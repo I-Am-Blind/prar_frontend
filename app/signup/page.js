@@ -4,6 +4,7 @@ import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { useRouter } from 'next/navigation';
+import { Signup } from '@/Database/Auth'
 
 
 import { Button } from "@/components/ui/button"
@@ -18,8 +19,8 @@ import { Input } from "@/components/ui/input"
 import { userDataManager } from "@/Config/userManager";
 
 const formSchema = z.object({
-  firstname: z.string().min(2).max(50),
-  lastname: z.string().min(2).max(50),
+  username: z.string().min(2).max(50),
+  pin: z.string().min(4).max(4),
 })
 
 export default function Page () {
@@ -28,15 +29,16 @@ export default function Page () {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      firstname: '',
-      lastname: '',
+      username: '',
+      pin: '',
     },
   })
   
-  function onSubmit(values) {
-    userDataManager.set("username",values)
+  async function onSubmit(userdata) {
+    Signup(userdata)
+    userDataManager.set("username",userdata)
     userDataManager.set("upcoming_appointments","No Upcoming Appointments")
-    router.push('/dashboard');
+    // router.push('/dashboard');
   }
   
 
@@ -47,11 +49,11 @@ export default function Page () {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2 flex flex-col justify-center">
         <FormField
           control={form.control}
-          name="firstname"
+          name="username"
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input placeholder="First Name" {...field} />
+                <Input placeholder="User Name" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -59,17 +61,17 @@ export default function Page () {
         />
         <FormField
           control={form.control}
-          name="lastname"
+          name="pin"
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input placeholder="Last Name" {...field} />
+                <Input placeholder="Pin" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">Log In</Button>
+        <Button type="submit">Sign Up</Button>
       </form>
     </Form>
       </div>
