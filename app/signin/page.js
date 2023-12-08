@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { useRouter } from 'next/navigation';
 import { Signin } from '@/Database/Auth'
+import { useToast } from "@/components/ui/use-toast";
 
 
 import { Button } from "@/components/ui/button"
@@ -25,7 +26,7 @@ const formSchema = z.object({
 
 export default function Page () {
 
-  const router = useRouter()
+  const { toast } = useToast()
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -35,9 +36,18 @@ export default function Page () {
   })
   
   async function onSubmit(userdata) {
-    Signin(userdata)
-    userDataManager.set("username",userdata)
-    userDataManager.set("upcoming_appointments","No Upcoming Appointments")
+    const response = await Signin(userdata)
+    if (response.error) {
+      toast({
+        description: response.message,
+        variant: "destructive"
+      });
+    } else {
+      toast({
+        description: response.message 
+      });
+    }
+    userDataManager.set("uid",response?.userId)
     // router.push('/dashboard');
   }
   

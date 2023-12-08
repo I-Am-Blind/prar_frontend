@@ -38,7 +38,7 @@ export default function Page() {
         className="flex  justify-center items-center gap-2 w-28 "
         onClick={() => router.back()}
       >
-        <Image src={left_arrow} className="h-4" />
+        <Image src={left_arrow} alt='test' className="h-4" />
         <h2>All Tests</h2>
       </Button>
       <div className="w-full flex  flex-wrap gap-y-4 gap-x-8  justify-center items-center">

@@ -1,80 +1,85 @@
-"use client"
+"use client";
 
-import * as z from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { useRouter } from 'next/navigation';
-import { Signup } from '@/Database/Auth'
-
-
-import { Button } from "@/components/ui/button"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { Signup } from "@/Database/Auth";
+import { useToast } from "@/components/ui/use-toast";
+import { Button } from "@/components/ui/button";
+import {formSchema , formFields , defaultValues } from '@/components/Form/formControl'
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { userDataManager } from "@/Config/userManager";
+} from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-const formSchema = z.object({
-  username: z.string().min(2).max(50),
-  pin: z.string().min(4).max(4),
-})
+import { Input } from "@/components/ui/input";
 
-export default function Page () {
 
-  const router = useRouter()
+
+export default function Page() {
+  const { toast } = useToast();
+  const router = useRouter();
   const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      username: '',
-      pin: '',
-    },
-  })
-  
+    defaultValues: defaultValues
+  });
+
   async function onSubmit(userdata) {
-    Signup(userdata)
-    userDataManager.set("username",userdata)
-    userDataManager.set("upcoming_appointments","No Upcoming Appointments")
-    // router.push('/dashboard');
+    const response = await Signup(userdata);
+    if (response.error) {
+      toast({
+        description: response.message,
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        description: response.message,
+      });
+      router.push("/signin");
+    }
   }
-  
 
   return (
     <main className="w-screen h-screen">
       <div className="flex justify-center items-center h-full w-full">
-      <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2 flex flex-col justify-center">
-        <FormField
-          control={form.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input placeholder="User Name" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="pin"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input placeholder="Pin" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit">Sign Up</Button>
-      </form>
-    </Form>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="grid grid-cols-3 grid-rows-4 gap-4 w-full p-8"
+          >
+            {formFields.map((field) => (
+              <FormField
+                key={field.name}
+                control={form.control}
+                name={field.name}
+                render={({ field: formField }) => (
+                  <FormItem>
+                    <FormControl>
+                    <Input
+                          type={field.type}
+                          placeholder={field.placeholder}
+                          {...formField}
+                        />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            ))}
+            <Button type="submit">Sign Up</Button>
+          </form>
+        </Form>
       </div>
     </main>
-  )
+  );
 }

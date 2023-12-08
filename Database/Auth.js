@@ -1,27 +1,30 @@
-import { getDatabase } from './database';
-import {  findUser, registerUser } from './userOperations';
+import { getDbInstance } from "./database"
 
-export const Signin = async (user) => {
-  const db = await getDatabase();
-  const users = db.users
-
-  const foundUser = await findUser(users, user.username, user.pin);
-
-  if (foundUser) {
-    console.log('User signed in:', foundUser);
-  } else {
-    console.error('User not found');
+export const Signup = async (user) => {
+  try {
+    const db = getDbInstance();
+    const existingUser = await db.users.where('username').equals(user?.username).first();
+    if (existingUser) {
+      return { message: 'User Already Exists' ,error :true };
+    }
+    await db.users.add({...user});
+    return { message: `Registered User :  ${user?.username}`, error :false};
+  } catch (error) {
+    return { message: 'An Error Occured During Signup' , error :true }
   }
 };
 
-export const Signup = async (user) => {
-  const db = await getDatabase();
-  const users = db.users
 
+export const Signin = async (user) => {
   try {
-    const newUser = await registerUser(users, user.username, user.pin);
-    console.log('User registered:', newUser);
+    const db = getDbInstance();
+    const foundUser = await db.users.where('username').equals(user.username).and(u => u.pin === user?.pin).first();
+    if (!foundUser) {
+      return { userId: null, message: 'Invalid credentials' ,error :true };
+    }
+    console.log(foundUser)
+    return { userId: foundUser.id, message: `User ${foundUser.username} logged in `, error :false };
   } catch (error) {
-    console.error('Error during registration:', error.message);
+    return { userId: null, message: 'An error occurred during signin', error :true };
   }
 };

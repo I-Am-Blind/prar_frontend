@@ -1,27 +1,23 @@
-import { createRxDatabase } from 'rxdb';
-import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie';
-import { userSchema } from './userSchema';
-import { addRxPlugin } from 'rxdb';
-import { RxDBDevModePlugin } from 'rxdb/plugins/dev-mode'
-addRxPlugin(RxDBDevModePlugin);
+import Dexie from 'dexie';
 
-const createDatabase = async () => {
-  const db = await createRxDatabase({
-    name: 'mydatabase',
-    storage: getRxStorageDexie()
-  });
-  await db.addCollections({
-    users: {
-      schema: userSchema
-    }
-  });
-  return db;
-};
-
-let dbInstance = null;
-export const getDatabase = async () => {
-  if (!dbInstance) {
-    dbInstance = await createDatabase();
+class Database extends Dexie {
+  constructor() {
+    super('UserData');
+    this.version(1).stores({
+      users: '++id, name, username, pin, age, sex, height, weight, phone, email, healthId, underlyingConditions, emergencyContact',
+    });
   }
-  return dbInstance;
+}
+
+let dbInstance;
+
+export const getDbInstance = () => {
+  if (typeof window !== 'undefined') {
+    if (!dbInstance) {
+      dbInstance = new Database();
+    }
+    return dbInstance;
+  }
 };
+
+export default Database;
