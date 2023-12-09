@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { Signup } from "@/Database/Auth";
+import  SignUpToFirebase  from '@/Routes/SignUpToFirebase'
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import {formSchema , formFields , defaultValues } from '@/components/Form/formControl'
@@ -34,7 +35,8 @@ export default function Page() {
     defaultValues: defaultValues
   });
 
-  async function onSubmit(userdata) {
+ async function writeToLocalDb(userdata,generated_uidid) {
+  userdata.id = generated_uidid
     const response = await Signup(userdata);
     if (response.error) {
       toast({
@@ -47,6 +49,24 @@ export default function Page() {
       });
       router.push("/signin");
     }
+  }
+
+  async function onSubmit(userdata) {
+    let res
+       res = await SignUpToFirebase('abcde',userdata)
+       if ( !res.error ) {
+        await writeToLocalDb(userdata,res?.id)
+        toast({
+          description: res.message,
+        })
+       } else {
+       toast({
+        description: res.message,
+        variant: "destructive",
+      })
+    }
+    
+    
   }
 
   return (

@@ -1,19 +1,27 @@
-"use client"
+export class UserDataManager {
+  constructor() {
+    if (typeof window !== 'undefined')
+      this.storage = sessionStorage;
 
-export const userDataManager = (() => {
-  const getall = () => {
-    const data = localStorage.getItem('userdata');
-    return data ? JSON.parse(data) : null;
-  };
+  }
 
-  const set = (key, value) => {
-    const currentData = getall(); 
+  getAll() {
+    const data = this.storage.getItem('userdata');
+    return data ? JSON.parse(data) : {};
+  }
+  
+  get(key) {
+    const currentData = this.getAll();
+    return currentData ? currentData[key] : undefined;
+  }
+
+  set(key, value) {
+    const currentData = this.getAll();
     currentData[key] = value;
-    localStorage.setItem('userdata', JSON.stringify(currentData));
-  };
+    this.storage.setItem('userdata', JSON.stringify(currentData));
+  }
 
-  return {
-    getall,
-    set,
-  };
-})();
+  deleteSession() {
+    this.storage.removeItem('userdata');
+  }
+}

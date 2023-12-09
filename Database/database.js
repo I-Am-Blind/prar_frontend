@@ -4,7 +4,7 @@ class Database extends Dexie {
   constructor() {
     super('UserData');
     this.version(1).stores({
-      users: '++id, name, username, pin, age, sex, height, weight, phone, email, healthId, underlyingConditions, emergencyContact',
+      users: '++id, name, username, pin, age, sex, height, weight, phone, email, healthId, underlyingConditions, emergencyContact, upcoming_appointments',
     });
   }
 }

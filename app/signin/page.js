@@ -17,7 +17,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { userDataManager } from "@/Config/userManager";
+import { UserDataManager } from "@/Config/userManager";
 
 const formSchema = z.object({
   username: z.string().min(2).max(50),
@@ -26,6 +26,8 @@ const formSchema = z.object({
 
 export default function Page () {
 
+  const router = useRouter()
+  const userDataManager = new UserDataManager();
   const { toast } = useToast()
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -43,12 +45,9 @@ export default function Page () {
         variant: "destructive"
       });
     } else {
-      toast({
-        description: response.message 
-      });
+      userDataManager.set("user",{id:response?.userId,username:response?.username,name:response?.name,upcoming_appointments:response?.upcoming_appointments})
+      router.push('/dashboard');
     }
-    userDataManager.set("uid",response?.userId)
-    // router.push('/dashboard');
   }
   
 
@@ -75,7 +74,7 @@ export default function Page () {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input placeholder="Pin" {...field} />
+                <Input placeholder="Pin" {...field} type="password" />
               </FormControl>
               <FormMessage />
             </FormItem>
