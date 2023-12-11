@@ -1,21 +1,16 @@
 "use client";
 
-import { getSocket } from "@/Socket/socket";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
+import UserDataContext from '@/Context/UserDataContext'
+import SensorPopup from '@/components/sensors/SensorPopup'
+import {instructions} from '@/Config/Instructions'
 
 export default function Page() {
-
-  useEffect(() => {
-    const socket = getSocket();
-    socket.emit("bpsensor")
-    socket.on('sensorData', (data) => {
-      console.log('Received sensor data:', data);
-  });
-  }, []);
+  const { userdata, updateUserData, datamanager } = useContext(UserDataContext);
 
   return (
-    <main className="h-screen w-screen py-8 px-4 ">
-      <div>Hello</div>
+    <main className="h-screen w-screen p-8 flex justify-center items-center ">
+      <SensorPopup heading='How to record Blood Pressure' sensortype='bp' instructions={instructions['bp']} />
     </main>
   );
 }
