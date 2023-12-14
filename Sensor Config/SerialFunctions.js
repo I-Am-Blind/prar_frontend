@@ -80,7 +80,6 @@ export const handleWriteToSerialPort = async (
   portRef,
   isConnected,
   commandWritten,
-  readData
 ) => {
   function delay(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));

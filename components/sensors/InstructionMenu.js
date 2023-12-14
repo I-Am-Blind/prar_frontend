@@ -6,7 +6,7 @@ import { Button } from "../ui/button"
 
 const InstructionMenu = ({heading, instructions, ino, sensor_images, sensortype, handleBack, handleNext, handleSkip}) => {
   return (
-    <div className="h-full w-full  rounded-2xl shadow-2xl shadow-gray-300 p-8 flex flex-col justify-around ">
+    <>
       <div className="header flex justify-between w-full h-1/6">
         <h2 className="font-semibold text-xl">{heading}</h2>
         <button className="text-blue-500 font-bold" onClick={handleSkip} >Skip</button>
@@ -19,7 +19,7 @@ const InstructionMenu = ({heading, instructions, ino, sensor_images, sensortype,
         { ino !== 0 && <Button className='w-32 shadow-xl shadow-gray-200 '  variant='outline' onClick = {handleBack} >Back</Button> }
         <Button className='w-32 shadow-lg shadow-blue-200 ' onClick = {handleNext} >{ino === instructions.length -1 ? 'Start': 'Next'}</Button>
       </div>
-    </div>
+    </>
   )
 }
 

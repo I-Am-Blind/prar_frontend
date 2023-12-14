@@ -14,7 +14,7 @@ const respoff  = ["0x55", "0xAA" ,"0x04","0xFF" ,"0x00", "0xFC"];
 
 
 export const commands = {
-    bp : [ecgoff,spoff,tempoff,ecgwaveoff,respoff,bpOn] ,
+    bp : [bpoff,ecgoff,spoff,tempoff,ecgwaveoff,respoff,spwaveoff,bpOn] ,
     bg : [ecgoff,spoff,tempoff,ecgwaveoff,respoff,bpoff] ,
     ecg : [spoff,tempoff,ecgwaveoff,respoff,bpoff,ecgOn] ,
     sp : [ecgoff,tempoff,ecgwaveoff,respoff,bpoff,spOn] ,
