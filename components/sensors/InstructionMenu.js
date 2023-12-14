@@ -4,12 +4,12 @@ import Image from "next/image"
 import { Button } from "../ui/button"
 
 
-const InstructionMenu = ({heading, instructions, ino, sensor_images, sensortype, handleBack, handleNext}) => {
+const InstructionMenu = ({heading, instructions, ino, sensor_images, sensortype, handleBack, handleNext, handleSkip}) => {
   return (
     <div className="h-full w-full  rounded-2xl shadow-2xl shadow-gray-300 p-8 flex flex-col justify-around ">
       <div className="header flex justify-between w-full h-1/6">
         <h2 className="font-semibold text-xl">{heading}</h2>
-        <button className="text-blue-500 font-bold" onClick={()=>{setino(instructions.length-1)}} >Skip</button>
+        <button className="text-blue-500 font-bold" onClick={handleSkip} >Skip</button>
       </div>
       <div className="instruction flex justify-between w-full  items-center h-4/6">
         <p className="w-[50%]  text-lg">{instructions[ino]}</p>
