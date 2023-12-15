@@ -53,7 +53,7 @@ export default function Page() {
 
   async function onSubmit(userdata) {
     let res
-       res = await SignUpToFirebase('abcde',userdata)
+       res = await SignUpToFirebase(process.env.NEXT_PUBLIC_DEVICE_ID,userdata)
        if ( !res.error ) {
         await writeToLocalDb(userdata,res?.id)
         toast({

@@ -1,3 +1,7 @@
+// No function
+// Just for backup
+
+
 {state === "results" && (
     <div className="flex flex-col gap-8 w-[85%] h-full">
       <h1 className="text-3xl font-semibold text-slate-600 text-center m">
