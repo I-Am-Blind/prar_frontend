@@ -1,0 +1,56 @@
+<svg id="Group1171277404" width="226" height="300" viewBox="0 0 226 300" fill="none" xmlns="http://www.w3.org/2000/svg" style="max-width: 100%; max-height: 100%;">
+<path d="M0 20C0 8.95428 8.95431 0 20 0H205.714C216.76 0 225.714 8.9543 225.714 20V118.571H0V20Z" fill="#D9D9D9" stroke-dasharray="0,0,0,671.4107666015625"><animate attributeType="XML" attributeName="stroke-dasharray" repeatCount="indefinite" dur="1.5151515151515151s" values="0,0,0,671.4107666015625; 
+          0,335.70538330078125,335.70538330078125,0; 
+          671.4107666015625,0,0,0" keyTimes="0; 0.5; 1" fill="freeze"></animate></path>
+<path d="M0 118.57H225.714V167.142C225.714 172.665 221.237 177.142 215.714 177.142H9.99999C4.47715 177.142 0 172.665 0 167.142V118.57Z" fill="#D9D9D9" stroke-dasharray="0,0,0,559.9925537109375"><animate attributeType="XML" attributeName="stroke-dasharray" repeatCount="indefinite" dur="1.5151515151515151s" values="0,0,0,559.9925537109375; 
+          0,279.99627685546875,279.99627685546875,0; 
+          559.9925537109375,0,0,0" keyTimes="0; 0.5; 1" fill="freeze"></animate></path>
+<rect x="20" y="27.1445" width="187.143" height="98.5714" fill="#161313" stroke-dasharray="0,0,0,571.4288330078125"><animate attributeType="XML" attributeName="stroke-dasharray" repeatCount="indefinite" dur="1.5151515151515151s" values="0,0,0,571.4288330078125; 
+          0,285.71441650390625,285.71441650390625,0; 
+          571.4288330078125,0,0,0" keyTimes="0; 0.5; 1" fill="freeze"></animate></rect>
+<circle cx="112.858" cy="15.7132" r="7.14286" fill="#0C0202" stroke-dasharray="0,0,0,44.59070587158203"><animate attributeType="XML" attributeName="stroke-dasharray" repeatCount="indefinite" dur="1.5151515151515151s" values="0,0,0,44.59070587158203; 
+          0,22.295352935791016,22.295352935791016,0; 
+          44.59070587158203,0,0,0" keyTimes="0; 0.5; 1" fill="freeze"></animate></circle>
+<rect x="178.572" y="138.57" width="28.5714" height="28.5714" rx="5" fill="#666363" stroke-dasharray="0,0,0,104.90023803710938"><animate attributeType="XML" attributeName="stroke-dasharray" repeatCount="indefinite" dur="1.5151515151515151s" values="0,0,0,104.90023803710938; 
+          0,52.45011901855469,52.45011901855469,0; 
+          104.90023803710938,0,0,0" keyTimes="0; 0.5; 1" fill="freeze"></animate></rect>
+<rect x="20" y="138.57" width="28.5714" height="28.5714" rx="5" fill="#D0CDCD" stroke-dasharray="0,0,0,104.90025329589844"><animate attributeType="XML" attributeName="stroke-dasharray" repeatCount="indefinite" dur="1.5151515151515151s" values="0,0,0,104.90025329589844; 
+          0,52.45012664794922,52.45012664794922,0; 
+          104.90025329589844,0,0,0" keyTimes="0; 0.5; 1" fill="freeze"></animate></rect>
+<rect x="66.2148" y="143.355" width="24.7143" height="7.57143" rx="1.5" fill="#3B3838" stroke="#C60707" stroke-dasharray="0,0,0,61.05673599243164"><animate attributeType="XML" attributeName="stroke-dasharray" repeatCount="indefinite" dur="1.5151515151515151s" values="0,0,0,61.05673599243164; 
+          0,30.52836799621582,30.52836799621582,0; 
+          61.05673599243164,0,0,0" keyTimes="0; 0.5; 1" fill="freeze"></animate></rect>
+<rect x="66.7148" y="143.855" width="29.4286" height="9.42857" rx="1" fill="#3B3838" stroke="#C60707" stroke-width="2" stroke-dasharray="0,0,0,75.3712158203125"><animate attributeType="XML" attributeName="stroke-dasharray" repeatCount="indefinite" dur="1.5151515151515151s" values="0,0,0,75.3712158203125; 
+          0,37.68560791015625,37.68560791015625,0; 
+          75.3712158203125,0,0,0" keyTimes="0; 0.5; 1" fill="freeze"></animate></rect>
+<path d="M66.2148 295L66.2148 213.429C66.2148 212.6 66.8864 211.929 67.7148 211.929H96.572C97.4004 211.929 98.072 212.6 98.072 213.429L98.072 295C98.072 297.485 96.0573 299.5 93.572 299.5H70.7148C68.2296 299.5 66.2148 297.485 66.2148 295Z" fill="#B7B2B2" stroke="#686262" stroke-dasharray="0,0,0,233.7088165283203"><animate attributeType="XML" attributeName="stroke-dasharray" repeatCount="indefinite" dur="1.5151515151515151s" values="0,0,0,233.7088165283203; 
+          0,116.85440826416016,116.85440826416016,0; 
+          233.7088165283203,0,0,0" keyTimes="0; 0.5; 1" fill="freeze"></animate></path>
+<line x1="65.7148" y1="238.07" x2="98.572" y2="238.07" stroke="#686262" stroke-dasharray="0,0,0,32.857200622558594"><animate attributeType="XML" attributeName="stroke-dasharray" repeatCount="1" dur="1.5151515151515151s" values="0,0,0,32.857200622558594; 
+          0,16.428600311279297,16.428600311279297,0; 
+          32.857200622558594,0,0,0" keyTimes="0; 0.5; 1" fill="freeze"></animate></line>
+<path d="M73.5723 215.715L73.5723 238.572" stroke="#686262" stroke-dasharray="0,0,0,22.857009887695312"><animate attributeType="XML" attributeName="stroke-dasharray" repeatCount="1" dur="1.5151515151515151s" values="0,0,0,22.857009887695312; 
+          0,11.428504943847656,11.428504943847656,0; 
+          22.857009887695312,0,0,0" keyTimes="0; 0.5; 1" fill="freeze"></animate></path>
+<path d="M81.4277 215.715L81.4277 238.572" stroke="#686262" stroke-dasharray="0,0,0,22.857009887695312"><animate attributeType="XML" attributeName="stroke-dasharray" repeatCount="1" dur="1.5151515151515151s" values="0,0,0,22.857009887695312; 
+          0,11.428504943847656,11.428504943847656,0; 
+          22.857009887695312,0,0,0" keyTimes="0; 0.5; 1" fill="freeze"></animate></path>
+<path d="M90 215.715L90 238.572" stroke="#686262" stroke-dasharray="0,0,0,22.857009887695312"><animate attributeType="XML" attributeName="stroke-dasharray" repeatCount="1" dur="1.5151515151515151s" values="0,0,0,22.857009887695312; 
+          0,11.428504943847656,11.428504943847656,0; 
+          22.857009887695312,0,0,0" keyTimes="0; 0.5; 1" fill="freeze"></animate></path>
+<path d="M83.5645 242.149C83.174 241.759 82.5408 241.759 82.1503 242.149L75.7864 248.513C75.3958 248.904 75.3958 249.537 75.7864 249.928C76.1769 250.318 76.81 250.318 77.2006 249.928L82.8574 244.271L88.5143 249.928C88.9048 250.318 89.538 250.318 89.9285 249.928C90.319 249.537 90.319 248.904 89.9285 248.513L83.5645 242.149ZM83.8574 244.285V242.857H81.8574V244.285H83.8574Z" fill="#686262" stroke-dasharray="0,0,0,48.71165466308594"><animate attributeType="XML" attributeName="stroke-dasharray" repeatCount="1" dur="1.5151515151515151s" values="0,0,0,48.71165466308594; 
+          0,24.35582733154297,24.35582733154297,0; 
+          48.71165466308594,0,0,0" keyTimes="0; 0.5; 1" fill="freeze"></animate></path>
+<path d="M83.5645 159.295C83.174 158.904 82.5408 158.904 82.1503 159.295L75.7864 165.659C75.3958 166.049 75.3958 166.682 75.7864 167.073C76.1769 167.463 76.81 167.463 77.2006 167.073L82.8574 161.416L88.5143 167.073C88.9048 167.463 89.538 167.463 89.9285 167.073C90.319 166.682 90.319 166.049 89.9285 165.659L83.5645 159.295ZM83.8574 207.145L83.8574 160.002L81.8574 160.002L81.8574 207.145L83.8574 207.145Z" fill="black" stroke-dasharray="0,0,0,140.1405792236328"><animate attributeType="XML" attributeName="stroke-dasharray" repeatCount="1" dur="1.5151515151515151s" values="0,0,0,140.1405792236328; 
+          0,70.0702896118164,70.0702896118164,0; 
+          140.1405792236328,0,0,0" keyTimes="0; 0.5; 1" fill="freeze"></animate></path>
+<path d="M77.1426 282.855L77.1426 299.998" stroke="#686262" stroke-dasharray="0,0,0,17.142974853515625"><animate attributeType="XML" attributeName="stroke-dasharray" repeatCount="1" dur="1.5151515151515151s" values="0,0,0,17.142974853515625; 
+          0,8.571487426757812,8.571487426757812,0; 
+          17.142974853515625,0,0,0" keyTimes="0; 0.5; 1" fill="freeze"></animate></path>
+<path d="M87.1426 282.855L87.1426 299.998" stroke="#686262" stroke-dasharray="0,0,0,17.142974853515625"><animate attributeType="XML" attributeName="stroke-dasharray" repeatCount="1" dur="1.5151515151515151s" values="0,0,0,17.142974853515625; 
+          0,8.571487426757812,8.571487426757812,0; 
+          17.142974853515625,0,0,0" keyTimes="0; 0.5; 1" fill="freeze"></animate></path>
+<path d="M76.4277 282.855H87.8563" stroke="#686262" stroke-dasharray="0,0,0,11.428604125976562"><animate attributeType="XML" attributeName="stroke-dasharray" repeatCount="1" dur="1.5151515151515151s" values="0,0,0,11.428604125976562; 
+          0,5.714302062988281,5.714302062988281,0; 
+          11.428604125976562,0,0,0" keyTimes="0; 0.5; 1" fill="freeze"></animate></path>
+<setting>{"type":"direct","speed":33,"random":1,"shift":1,"size":1,"rupture":50}</setting></svg>

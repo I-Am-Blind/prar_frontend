@@ -20,10 +20,12 @@ import Link from "next/link";
 //Assets Import
 import { ref, onValue, off } from "firebase/database";
 import { db } from "@/Config/firebaseconfig";
+import { GetLastReadings } from '@/Database/Sensors'
 
 export default function Dashboard() {
   const { userdata, datamanager } = useContext(UserDataContext);
   const data = userdata;
+  const [lastreadings, setlastreadings] = useState(['160/140',88,88,88,88])
   const [appointments, setappointments] = useState(
     data?.user?.upcoming_appointments
   );
@@ -38,13 +40,24 @@ export default function Dashboard() {
     const userAppointmentsRef = ref(
       db,
       `user_appointments/${userdata?.user?.id}`
-    ); // Replace 'yourUserId' with actual ID
-    onValue(userAppointmentsRef, (snapshot) => {
+    );
+     onValue(userAppointmentsRef, (snapshot) => {
       const appointmentsData = snapshot.val();
       userdata.upcoming_appointments = appointmentsData;
       setappointments(appointmentsData);
-      console.log(appointmentsData);
     });
+
+    async function getlastreadings () {
+      const readings = await GetLastReadings()
+      setlastreadings([
+        `${readings?.bp[0]?.readings}`,
+        readings?.hr[0]?.readings,
+        readings?.sp[0]?.readings,
+        37,
+        readings?.bg[0]?.readings,
+      ])
+    }
+    getlastreadings() 
     return () => off(userAppointmentsRef);
   }, []);
 
@@ -96,7 +109,7 @@ export default function Dashboard() {
               </TabsList>
               <TabsContent value="upcoming" className="p-2">
                 <div className=" text-sm flex flex-col gap-1 items-center text-center h-full">
-                  {appointments.link ? (
+                  {appointments?.link ? (
                     <>
                       <span>
                         <span>Appointment with </span>
@@ -129,7 +142,7 @@ export default function Dashboard() {
                       </button>
                     </>
                   ) : (
-                    <>appointments</>
+                    <>No Upcoming Appointments</>
                   )}
                 </div>
               </TabsContent>
@@ -163,7 +176,7 @@ export default function Dashboard() {
         <div className="card-1 w-full h-[90%] grid grid-cols-8 grid-rows-4 p-0">
           <h3 className="col-span-7 h-4 label-1 mx-8">Your Last Readings</h3>
           <div className="vitals-container col-span-7 h-full">
-            <DashboardReadings vitals={["160/140", 96, 98, 37, 86]} />
+            <DashboardReadings vitals={lastreadings} />
           </div>
           <button className="previous-scans justify-center items-center col-start-8 row-span-4 row-start-1 flex flex-col gap-4 border-primary border-[1px] h-full rounded-e-xl p-4 ">
             <span className="flex flex-col gap-4">

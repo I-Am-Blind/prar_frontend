@@ -1,16 +1,50 @@
+"use client"
+
 import ai from "@/public/assets/ai.png";
 import Image from "next/image";
+import StoreSensorData from '@/Routes/StoreSensorData'
+import { useEffect } from "react";
+import { StoreReadings} from '@/Database/Sensors'
 
 const Reading = ({
-  results = [{ name: "No value to display", value: "", unit: "" }],
+  results,
   variant = "normal",
+  userId = null
 }) => {
+
+  const db_id = {
+    'Heart Rate' : 'hr',
+    'Spo2' : 'sp',
+    'Blood Glucose' : 'bg',
+  }
+
+useEffect(() => {
+  if ( userId  && results)
+    {
+      if ( results[0]?.name === 'Systolic' || results?.name[0] === 'Diastolic')
+           {
+            StoreReadings(userId, 'bp', `${results[0].value}/${results[1].value}`)
+            StoreSensorData(userId, 'bp', `${results[0].value}/${results[1].value}`)
+           }  else {
+            results.forEach(result => {
+                  if (result.name && result.value) {                   
+                      console.log(userId, db_id[result.name], result.value)
+                      StoreReadings(userId, db_id[result.name], result.value)
+                      StoreSensorData(userId, db_id[result.name], result.value)
+                  }
+              })
+           }
+    }
+    
+}, [])
+
+
   return (
     <div className="bg-green2 rounded-2xl  flex shadow-xl shadow-green2  w-full h-full">
       <div className="flex gap-8 justify-center items-center w-[50%]">
       {results.map((result) => {
         return (
-          <div className="flex flex-col">
+          <div className="flex flex-col" key={result?.name}>
             <span className="font-medium text-gray-500 text-lg">
               {result?.name}
             </span>

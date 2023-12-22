@@ -1,10 +1,5 @@
 "use client";
 //bpsensor
-import bp1 from "@/public/assets/instructions/bp1.png";
-import bp2 from "@/public/assets/instructions/bp2.png";
-import bp3 from "@/public/assets/instructions/bp3.png";
-import bp4 from "@/public/assets/instructions/bp4.png";
-import bp5 from "@/public/assets/instructions/bp5.png";
 import { useState, useEffect, useRef } from "react";
 import InstructionMenu from "./InstructionMenu";
 import CircularProgress from "./CircularProgress";
@@ -12,11 +7,9 @@ import { Button } from "../ui/button";
 import Reading from "./Reading";
 import { commands } from "../../Sensor Config/commands";
 import { disconnectFromPort } from "../../Sensor Config/SerialFunctions";
+import { UserDataManager } from "@/Config/userManager";
 
-const SensorPopup = ({ heading, instructions, sensortype, toast }) => {
-  const sensor_images = {
-    bp: [bp1, bp2, bp3, bp4, bp5],
-  };
+const BpSensorPopup = ({ heading, instructions, sensor_images, toast }) => {
 
   const [ino, setino] = useState(0);
   const [state, setstate] = useState("instructions");
@@ -28,14 +21,7 @@ const SensorPopup = ({ heading, instructions, sensortype, toast }) => {
   const sensorstarted = useRef(false);
   const sensorscompleted= useRef(false);
   const [sensorresults, setsensorresults] = useState([]);
-
-  const sensor_config = {
-    bp: [
-      { unit: "mmHg", name: "Systolic" },
-      { unit: "mmHg", name: "Diastolic" },
-    ],
-    spo2: [{ unit: "%", name: "SpO2" }],
-  };
+  const userDataManager = new UserDataManager();
 
   const readData = async () => {
     try {
@@ -110,7 +96,7 @@ const SensorPopup = ({ heading, instructions, sensortype, toast }) => {
       return new Promise((resolve) => setTimeout(resolve, ms));
     }
     const delayTime = 10;
-    for (const command of commands[sensortype]) {
+    for (const command of commands['bp']) {
       const bytes = command.map((hexString) => parseInt(hexString, 16));
       const buffer = new Uint8Array(bytes);
       writeToSerialPort(buffer);
@@ -141,14 +127,14 @@ const SensorPopup = ({ heading, instructions, sensortype, toast }) => {
   };
 
   return (
-    <div className="h-[26rem] w-[58rem]  rounded-2xl shadow-2xl shadow-gray-300 p-8 ">
+    <div className="overlay h-screen w-screen absolute flex justify-center items-center ">
+      <div className="h-[26rem] w-[58rem]  rounded-2xl shadow-2xl shadow-gray-300 p-8 bg-background">
       {state === "instructions" && (
           <InstructionMenu
             ino={ino}
             heading={heading}
             instructions={instructions}
             sensor_images={sensor_images}
-            sensortype={sensortype}
             handleBack={handleBack}
             handleNext={handleNext}
             handleSkip={handleSkip}
@@ -159,7 +145,7 @@ const SensorPopup = ({ heading, instructions, sensortype, toast }) => {
         <div className="flex flex-col justify-center items-center gap-8">
           <CircularProgress
             value={progressvalue}
-            unit={sensor_config[sensortype][0].unit}
+            unit={'mmHg'}
             max={200}
           />
           <Button
@@ -180,7 +166,7 @@ const SensorPopup = ({ heading, instructions, sensortype, toast }) => {
           <h1 className="text-2xl font-semibold text-slate-600 text-center ">
            Test Successfully Taken
           </h1>
-          <Reading results={sensorresults} />
+          <Reading results={sensorresults} userId={userDataManager.getAll().user?.id}  />
           <div className="buttons flex justify-center gap-4 w-full mt-4">
             <Button
               className="w-44 h-12 shadow-xl shadow-gray-200 "
@@ -195,7 +181,8 @@ const SensorPopup = ({ heading, instructions, sensortype, toast }) => {
         </div>
       )}
     </div>
+    </div>
   );
 };
 
-export default SensorPopup;
+export default BpSensorPopup;

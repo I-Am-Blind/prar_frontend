@@ -17,5 +17,6 @@ export const commands = {
     bp : [bpoff,ecgoff,spoff,tempoff,ecgwaveoff,respoff,spwaveoff,bpOn] ,
     bg : [ecgoff,spoff,tempoff,ecgwaveoff,respoff,bpoff] ,
     ecg : [spoff,tempoff,ecgwaveoff,respoff,bpoff,ecgOn] ,
-    sp : [ecgoff,tempoff,ecgwaveoff,respoff,bpoff,spOn] ,
+    hr : [spoff,spwaveoff,ecgoff,tempoff,ecgwaveoff,respoff,spOn] ,
+    hroff: [spoff]
 }
