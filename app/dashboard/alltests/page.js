@@ -48,8 +48,7 @@ export default function Page() {
         {buttonLayout("Digital Stethoscope",sthetho,'/dashboard/alltests/stethoscope')}
         {buttonLayout("Blood Pressure",bp,'/dashboard/alltests/bloodpressure')}
         {buttonLayout("Body Temperature",bt,'/dashboard/alltests/temperature')}
-        {buttonLayout("ENT",ent,'/dashboard/alltests/ent')}
-        {buttonLayout("Otoscope",ecg,'/dashboard/alltests/otoscope')}
+        {buttonLayout("ENT",ent,'/dashboard/alltests/otoscope')}
       </div>
     </main>
   );

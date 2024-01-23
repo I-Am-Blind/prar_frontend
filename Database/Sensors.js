@@ -19,7 +19,13 @@ export const StoreReadings = async (userId, sensor, readings) => {
     try {
       const db = getDbInstance();
 
-      const allReadings = await db[`${sensor}_readings`].toArray()
+      const sensors = ['bp', 'bg', 't', 'hr', 'sp']
+      const allReadings = {}
+
+      for (const sensor of sensors) {
+        allReadings[sensor] = await db[`${sensor}_readings`].toArray();
+      }
+  
       return allReadings
       
     } catch (error) {
