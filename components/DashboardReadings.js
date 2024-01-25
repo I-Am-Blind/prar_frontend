@@ -30,7 +30,6 @@ import { NORMAL_VALUES } from "@/Config/vitalManager";
     return isAboveNormal ? 'text-red-500' : 'text-green-500';
   };
   const DashboardReadings = ({ vitals }) => {
-    console.log(vitals)
     return (
       <div className="flex justify-between px-8 py-0 h-full w-full">
         {/* Blood Pressure */}

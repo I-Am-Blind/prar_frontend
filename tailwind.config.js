@@ -25,9 +25,12 @@ module.exports = {
         green3 : 'rgba(26, 181, 143, 0.4)',
         red1 : '#DA5555',
         background: "hsl(var(--background))",
+        lightblue: "#f3f9ff",
+        darkblue : '#1C274C',
         foreground: "hsl(var(--foreground))",
         dash : "#F3F9FF",
         primtext: "#112564",
+        bluetext: '#285BF4',
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",

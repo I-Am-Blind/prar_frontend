@@ -179,6 +179,8 @@ export default function Dashboard() {
             <DashboardReadings vitals={lastreadings} />
           </div>
           <button className="previous-scans justify-center items-center col-start-8 row-span-4 row-start-1 flex flex-col gap-4 border-primary border-[1px] h-full rounded-e-xl p-4 ">
+          <Link
+          href="/dashboard/previousScans">
             <span className="flex flex-col gap-4">
               <Image alt="img" src={previous_scans} />
               <h3 className="text-primary font-medium">
@@ -188,7 +190,9 @@ export default function Dashboard() {
               </h3>
             </span>
             <Image alt="img" src={right_arrow_blue_long} />
+            </Link>
           </button>
+          
         </div>
       </section>
     </main>
