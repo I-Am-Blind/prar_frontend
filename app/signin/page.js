@@ -3,7 +3,7 @@
 import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { useRouter } from 'next/navigation';
+import { useRouter,useSearchParams } from 'next/navigation';
 import { Signin } from '@/Database/Auth'
 import { useToast } from "@/components/ui/use-toast";
 
@@ -26,13 +26,16 @@ const formSchema = z.object({
 
 export default function Page () {
 
+ 
+  const searchParams = useSearchParams()
+  const user = searchParams.get('user')
   const router = useRouter()
   const userDataManager = new UserDataManager();
   const { toast } = useToast()
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: '',
+      username: user || '',
       pin: '',
     },
   })
@@ -49,7 +52,9 @@ export default function Page () {
       router.push('/dashboard');
     }
   }
+
   
+
 
   return (
     <main className="w-screen h-screen">

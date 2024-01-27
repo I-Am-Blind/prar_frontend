@@ -23,3 +23,17 @@ export const Signin = async (user) => {
     return { userId: null, message: 'An error occurred during signin', error :true };
   }
 };
+
+export const GetAllUsers= async () => {
+  try {
+    const db = getDbInstance();
+    const users = await db.users.toArray();
+    const userDetails = users.map(user => ({
+      username: user.username,
+      name: user.name
+    }));
+    return userDetails;
+  } catch (error) {
+    return { userId: null, message: 'An error occurred during getting users', error :true };
+  }
+};

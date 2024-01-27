@@ -23,13 +23,12 @@ import { db } from "@/Config/firebaseconfig";
 import { GetLastReadings } from '@/Database/Sensors'
 
 export default function Dashboard() {
-  const { userdata, datamanager } = useContext(UserDataContext);
+  const { userdata, datamanager, updateUserData } = useContext(UserDataContext);
   const data = userdata;
   const [lastreadings, setlastreadings] = useState(['160/140',88,88,88,88])
   const [appointments, setappointments] = useState(
     data?.user?.upcoming_appointments
   );
-
   const { toast } = useToast();
   useEffect(() => {
     toast({
