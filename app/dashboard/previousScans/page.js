@@ -8,6 +8,7 @@ import moment from "moment";
 
 import arrow_left from "@/public/assets/left_small_arrow_blue.svg";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Page() {
   const [readings, setreadings] = useState([]);
@@ -295,10 +296,14 @@ export default function Page() {
   return (
     <main className="p-4 pt-8 bg-lightblue h-screen w-screen flex flex-col justify-around">
       <div className="flex justify-between">
+        <Link 
+        href ='/dashboard'
+        >
         <span className="flex justify-center items-center gap-2">
           <Image src={arrow_left} alt="left_arrow" className="h-4" />
           <h2 className="text-bluetext font-bold">Your Last Readings</h2>
         </span>
+        </Link>
         <Button>Share</Button>
       </div>
       <div className="bg-white h-[80%] rounded-lg p-2 shadow-lg shadow-gray-100">
