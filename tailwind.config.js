@@ -21,6 +21,8 @@ module.exports = {
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         lightblack:"#393939",
+        tabbg:"#285BF4",
+        tabtext:"#FFFFFF",
         green1 : '#1AB58F',
         green2 : 'rgba(26, 181, 143, 0.08)',
         green3 : 'rgba(26, 181, 143, 0.4)',
