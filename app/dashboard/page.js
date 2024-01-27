@@ -31,10 +31,10 @@ export default function Dashboard() {
   );
   const { toast } = useToast();
   useEffect(() => {
-    toast({
-      title: "Sign In Successful",
-      description: `${data?.user?.name} signed in `,
-    });
+    // toast({
+    //   title: "Sign In Successful",
+    //   description: `${data?.user?.name} signed in `,
+    // });
 
     const userAppointmentsRef = ref(
       db,
