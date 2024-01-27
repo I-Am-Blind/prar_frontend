@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 //Assets Import
-import left_arrow from "@/public/assets/left_small_arrow_white.svg";
+import left_arrow from "@/public/assets/left_small_arrow_black.svg";
 import right_arrow from "@/public/assets/right_arrow_blue.svg"
 import ecg from "@/public/assets/sensors/ecg.svg"
 import bg from "@/public/assets/sensors/bg.svg"
@@ -34,13 +34,13 @@ export default function Page() {
 
   return (
     <main className="h-screen w-screen py-8 px-4 flex flex-col justify-around">
-      <Button
-        className="flex  justify-center items-center gap-2 w-28 "
+      <button
+        className="flex  justify-center items-center gap-2 w-28 font-bold "
         onClick={() => router.back()}
       >
         <Image src={left_arrow} alt='test' className="h-4" />
         <h2>All Tests</h2>
-      </Button>
+      </button>
       <div className="w-full flex  flex-wrap gap-y-4 gap-x-8  justify-center items-center">
         {buttonLayout("ECG",ecg,'/dashboard/alltests/ecg')}
         {buttonLayout("Blood Glucose",bg,'/dashboard/alltests/bloodglucose')}
