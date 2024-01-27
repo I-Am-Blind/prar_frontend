@@ -72,8 +72,8 @@ export default function Dashboard() {
   };
 
   return (
-    <main className="h-screen w-screen flex flex-col p-4 ">
-      <section className="top-section w-full h-[20%]">
+    <main className="h-screen w-screen flex flex-col p-4 mt-8 ">
+      <section className="top-section w-full h-[15%]">
         <DashboardSettings handleLogout={handleLogout} />
       </section>
       <section className="middle-section w-full h-[40%] grid grid-cols-3 grid-rows-3 gap-4">

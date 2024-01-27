@@ -26,7 +26,7 @@ export default function RootLayout({ children }) {
   return (
     <UserDataContext.Provider value={{ userdata, updateUserData, datamanager }}>
       {Object.keys(userdata).length !== 0 ? (
-        <div className={`${manrope.className} bg-lightblue`}>
+        <div className={`${manrope.className} bg-lightblue `}>
           {children}
           <Toaster />
         </div>
