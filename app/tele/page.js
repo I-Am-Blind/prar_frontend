@@ -5,13 +5,63 @@ import React, { useState, useEffect } from 'react';
 
 import { JaaSMeeting } from '@jitsi/react-sdk';
 
+import io from 'socket.io-client';
+
+import BgSensorPopup from '@/components/sensors/BgSensorPopup'
+import BpSensorPopup from '@/components/sensors/BpSensorPopup'
+import {instructions, sensor_images} from '@/Config/Instructions'
+import { useToast } from "@/components/ui/use-toast";
+
+
 export default function Home() {
     const [token, setToken] = useState('');
     const [joinCall, setJoinCall] = useState(false);
     const [joinAudio, setJoinAudio] = useState(false);
-
     const [isChatOpen, setIsChatOpen] = useState(false);
     const router = useRouter();
+    const [currentPopup, setCurrentPopup] = useState(null);
+    const [popupQueue, setPopupQueue] = useState([]);
+    const [showBloodPressurePopup, setShowBloodPressurePopup] = useState(false);
+    const { toast } = useToast()
+
+    
+
+
+
+    useEffect(() => {
+      const socket = io('https://ausa-tele-socket-server-production.up.railway.app/');
+
+      socket.on('connect', () => {
+          console.log('Connected to the server');
+          socket.emit('message', 'Hello Server!');
+      });
+      socket.on('message', (message) => {
+        console.log(message);
+        if (Array.isArray(message)) {
+            setPopupQueue(message);
+        }
+    });
+
+      return () => {
+          console.log('Disconnecting socket...');
+          socket.disconnect();
+      };
+  }, []);
+
+  useEffect(() => {
+    if (popupQueue.length > 0 && !currentPopup) {
+        setCurrentPopup(popupQueue[0]);
+    }
+}, [popupQueue, currentPopup]);
+
+const closeCurrentPopup = () => {
+    setCurrentPopup(null);
+    setPopupQueue(prevQueue => prevQueue.slice(1));
+};
+
+
+
+
 
     const handleChatUpdated = (eventData) => {
         setIsChatOpen(eventData.isOpen);
@@ -27,11 +77,12 @@ export default function Home() {
       
       const navigateOnHangup = () => {
         router.push('/dashboard');
-      
       };
+
+
       return (
           <main className="flex w-full h-screen items-center flex-col bg-[#D9D9D9] justify-start">
-          <div className="flex top-0 h-full w-full">
+          <div className="relative flex top-8 h-screen-minus-2rem w-full">
             <JaaSMeeting
               appId="vpaas-magic-cookie-cd58d83d6bb247d893d484da00e00493"
               roomName="Ausa Clinic"
@@ -141,7 +192,7 @@ export default function Home() {
         />}
     </div>  
     <div className={`absolute items-start bottom-[15px] left-[15px] w-[203px] h-auto ${isChatOpen ? 'opacity-0 ' : 'opacity-100'}`}>
-    <div className=" relative w-[203px] h-[135px] mx-auto text-left text-xs rounded-[10px] bg-[#D3D3D3] opacity-[0.6] z-50 text-darkslategray font-manrope">
+    <div className=" relative w-[203px] h-[135px] mx-auto text-left text-xs rounded-[10px] bg-[#D3D3D3] opacity-[0.6]  text-darkslategray font-manrope">
     <div className="absolute top-[0px] left-[0px] rounded-3xs bg-lightgray w-[203px] h-[135px] opacity-[0.7]" />
     <div className="absolute top-[9px] left-[16px] leading-[20px] inline-block w-[101px] opacity-[0.6]">
       Consultation with
@@ -160,7 +211,16 @@ export default function Home() {
     </div>
     <div className="absolute top-[85px] left-[16px] leading-[20px] opacity-[0.6]">{`Dr. Partha’s Hair & Skin Hospital`}</div>
   </div>
+
   </div>
+
+  {currentPopup === 'Blood Glucose' && <BgSensorPopup className='z-50' onClose={closeCurrentPopup} heading='How to record Blood Glucose'  instructions={instructions['bg']} sensor_images={sensor_images['bg']} toast={toast}  />}
+  {currentPopup === 'Hello' && <BpSensorPopup className='z-50' onClose={closeCurrentPopup} heading='How to record Blood Pressure'  instructions={instructions['bp']} sensor_images={sensor_images['bp']} toast={toast} /> }
+  {currentPopup === 'Hello' && <HrSensorPopup className='z-50' onClose={closeCurrentPopup} heading='How to record Heart rate and Spo2'  instructions={instructions['hr']} sensor_images={sensor_images['hr']} toast={toast} />}
+  {currentPopup === 'Hello' && <IDeal/> }
+  {currentPopup === 'Hello' && <IDeal/> }
+  {currentPopup === 'Hello' && <IDeal/> }
+  {currentPopup === 'Hello' && <IDeal/> }
 </main>
       );
     }

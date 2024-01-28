@@ -150,6 +150,7 @@ const EcgPopupFrame = (props) => {
         />
         </div>
               </div>
+              {showTestPage && <CanvasAnimationPage />}
 
     </div>
     );

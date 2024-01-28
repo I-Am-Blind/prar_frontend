@@ -21,7 +21,7 @@ const Reading = ({
 useEffect(() => {
   if ( userId  && results)
     {
-      if ( results[0]?.name === 'Systolic' || results?.name[0] === 'Diastolic')
+      if ( results[0]?.name === 'Systolic' || results[0]?.name === 'Diastolic')
            {
             StoreReadings(userId, 'bp', `${results[0].value}/${results[1].value}`)
             StoreSensorData(userId, 'bp', `${results[0].value}/${results[1].value}`)

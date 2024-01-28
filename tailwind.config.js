@@ -16,6 +16,9 @@ module.exports = {
       },
     },
     extend: {
+      height: {
+        'screen-minus-2rem': 'calc(100vh - 2rem)',
+      },  
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
