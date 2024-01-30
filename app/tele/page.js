@@ -1,5 +1,6 @@
 "use client"
 import { useRouter } from 'next/navigation';
+import Image from "next/image";
 
 import React, { useState, useEffect } from 'react';
 
@@ -50,6 +51,21 @@ export default function Home() {
         setCurrentPopup(popupQueue[0]);
     }
 }, [popupQueue, currentPopup]);
+
+
+
+useEffect(() => {
+  if (joinCall) {
+    closeCurrentPopup();
+  }
+}, [joinCall]); // Dependency array, so the effect runs whenever joinCall changes
+
+useEffect(() => {
+  if (joinAudio) {
+    closeCurrentPopup();
+  }
+}, [joinAudio]); // Dependency array, so the effect runs whenever joinCall changes
+
 
 const closeCurrentPopup = () => {
     setCurrentPopup(null);
@@ -113,7 +129,7 @@ const closeCurrentPopup = () => {
           </div>
 
          <div className={`absolute items-start  right-[18rem]  ${isChatOpen ? 'bottom-[5.3rem] ' : 'bottom-[1rem]'} `}>
-         <button onClick={() => setJoinCall(!joinCall) } className={`w-[70px] h-[70px] rounded-full border-none font-semibold flex flex-col items-center justify-center shadow-lg overflow-hidden relative gap-0.5 ${joinCall ? 'bg-[#BC0C0C] opacity-70' : 'bg-black opacity-70'} `}>
+         <button onClick={() => {setJoinCall(!joinCall) ; if(!joinCall){closeCurrentPopup ;}}} className={`w-[70px] h-[70px] rounded-full border-none font-semibold flex flex-col items-center justify-center shadow-lg overflow-hidden relative gap-0.5 ${joinCall ? 'bg-[#BC0C0C] opacity-70' : 'bg-black opacity-70'} `}>
          <svg width="35" height="33" viewBox="0 0 518 518" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M175.669 41.0879L166.739 17.7349L166.451 17.8492L175.669 41.0879ZM169.702 43.4545L160.484 20.2132L160.133 20.3582L169.702 43.4545ZM293.001 316.386L305.755 337.893L306.001 337.743L293.001 316.386ZM44.2164 115.498C-26.5482 221.39 -9.57625 363.06 84.1994 449.24L118.032 412.427C42.4071 342.923 28.7201 228.677 85.7884 143.278L44.2164 115.498ZM84.1994 449.24C177.975 535.423 320.568 540.4 420.125 460.963L388.941 421.88C308.655 485.94 193.658 481.927 118.032 412.427L84.1994 449.24ZM420.125 460.963C519.678 381.53 546.488 241.39 483.275 130.82L439.868 155.636C490.845 244.803 469.225 357.82 388.941 421.88L420.125 460.963ZM483.275 130.82C420.065 20.2508 285.701 -27.7525 166.739 17.7349L184.598 64.4389C280.535 27.7555 388.891 66.4665 439.868 155.636L483.275 130.82ZM166.451 17.8492L160.484 20.2132L178.92 66.6932L184.886 64.3265L166.451 17.8492ZM160.133 20.3582C112.937 39.9125 72.5984 73.0199 44.2164 115.498L85.7884 143.278C108.677 109.022 141.209 82.3202 179.271 66.5505L160.133 20.3582ZM217.335 259.02C217.335 239.143 231.378 222.033 250.875 218.153L241.121 169.115C198.228 177.646 167.335 215.29 167.336 259.023L217.335 259.02ZM250.875 218.153C270.371 214.277 289.891 224.71 297.498 243.077L343.691 223.947C326.958 183.54 284.015 160.583 241.121 169.115L250.875 218.153ZM297.498 243.077C305.105 261.443 298.678 282.623 282.148 293.667L309.901 335.256C346.265 310.963 360.428 264.35 343.691 223.947L297.498 243.077ZM282.148 293.667C281.431 294.143 280.731 294.59 280.005 295.033L306.001 337.743C307.318 336.94 308.618 336.113 309.901 335.256L282.148 293.667ZM280.251 294.883C267.371 302.52 251.381 302.66 238.371 295.243L213.618 338.687C242.238 354.997 277.418 354.693 305.755 337.893L280.251 294.883ZM238.371 295.243C225.361 287.83 217.331 273.993 217.335 259.02L167.336 259.023C167.325 291.967 184.994 322.373 213.618 338.687L238.371 295.243Z" fill="white"/>
 <path d="M430.758 73.9438C428.582 60.3095 415.762 51.0232 402.128 53.2018C388.495 55.3808 379.208 68.1995 381.385 81.8338L430.758 73.9438ZM280.435 294.78C268.498 301.724 264.455 317.027 271.398 328.96C278.342 340.894 293.645 344.94 305.578 337.997L280.435 294.78ZM505.175 315.087C515.888 306.38 517.515 290.634 508.805 279.92C500.098 269.207 484.352 267.58 473.638 276.287L505.175 315.087ZM238.162 295.097C226.202 288.2 210.912 292.307 204.015 304.267C197.118 316.227 201.222 331.514 213.185 338.414L238.162 295.097ZM87.2854 444.03C89.4614 457.664 102.279 466.954 115.913 464.777C129.548 462.6 138.837 449.784 136.66 436.147L87.2854 444.03ZM237.582 223.26C249.515 216.314 253.558 201.01 246.612 189.078C239.665 177.146 224.362 173.103 212.428 180.049L237.582 223.26ZM217.338 259.02C217.338 245.214 206.145 234.02 192.338 234.02C178.531 234.024 167.339 245.217 167.339 259.024L217.338 259.02ZM333.412 500.307C346.308 505.237 360.758 498.78 365.692 485.884C370.622 472.987 364.165 458.534 351.268 453.604L333.412 500.307ZM184.601 17.7375C171.705 12.8065 157.253 19.2635 152.322 32.1602C147.39 45.0568 153.848 59.5088 166.744 64.4398L184.601 17.7375ZM300.672 259.024C300.675 272.83 311.868 284.024 325.675 284.02C339.482 284.02 350.675 272.827 350.672 259.02L300.672 259.024ZM12.8378 202.954C2.12343 211.664 0.497774 227.41 9.20644 238.124C17.9148 248.837 33.6604 250.464 44.3748 241.754L12.8378 202.954ZM279.852 222.947C291.812 229.844 307.098 225.737 313.995 213.777C320.895 201.817 316.788 186.529 304.828 179.631L279.852 222.947ZM381.385 81.8338C394.972 166.857 354.855 251.48 280.435 294.78L305.578 337.997C397.862 284.304 447.608 179.373 430.758 73.9438L381.385 81.8338ZM473.638 276.287C406.628 330.754 312.965 338.234 238.162 295.097L213.185 338.414C305.942 391.904 422.085 382.624 505.175 315.087L473.638 276.287ZM136.66 436.147C123.094 351.15 163.195 266.564 237.582 223.26L212.428 180.049C120.188 233.744 70.4634 338.634 87.2854 444.03L136.66 436.147ZM167.339 259.024C167.345 366.094 233.402 462.067 333.412 500.307L351.268 453.604C270.615 422.764 217.345 345.37 217.338 259.02L167.339 259.024ZM166.744 64.4398C247.398 95.2788 300.668 172.675 300.672 259.024L350.672 259.02C350.668 151.949 284.612 55.9775 184.601 17.7375L166.744 64.4398ZM44.3748 241.754C111.383 187.29 205.045 179.809 279.852 222.947L304.828 179.631C212.072 126.142 95.9288 135.419 12.8378 202.954L44.3748 241.754Z" fill="white"/>
@@ -210,18 +226,22 @@ const closeCurrentPopup = () => {
 
   </div>
 
-  {currentPopup === 'Blood Glucose' && <BgSensorPopup className='z-50' onClose={closeCurrentPopup} heading='How to record Blood Glucose'  instructions={instructions['bg']} sensor_images={sensor_images['bg']} toast={toast}  />}
+  {currentPopup === 'Blood Glucose' && (<BgSensorPopup className='z-50' onClose={closeCurrentPopup} heading='How to record Blood Glucose'  instructions={instructions['bg']} sensor_images={sensor_images['bg']} toast={toast}> <button className='absolute z-60 top-[5rem] right-[10rem] bg-[#ffffff] w-[20px] h-[20px]' onClick={closeCurrentPopup}>Close</button></BgSensorPopup>)}
   {currentPopup === 'Blood Pressure' && <BpSensorPopup className='z-50' onClose={closeCurrentPopup} heading='How to record Blood Pressure'  instructions={instructions['bp']} sensor_images={sensor_images['bp']} toast={toast} /> }
   {currentPopup === 'SpO2' && <HrSensorPopup className='z-50' onClose={closeCurrentPopup} heading='How to record Heart rate and Spo2'  instructions={instructions['hr']} sensor_images={sensor_images['hr']} toast={toast} />}
-  {currentPopup === 'Body temperature' && <IDeal/> }
-  {currentPopup === 'Hello' && <IDeal/> }
-  {currentPopup === 'Hello' && <IDeal/> }
+  {currentPopup === 'Stethoscope'? (<><div className={`absolute w-[282px] h-[105.15px] right-[12rem] ${isChatOpen ? 'bottom-[10.3rem] ' : 'bottom-[6rem]'}`}><Image className=' top-0 left-0' width={476}  height={140.2}  src="/StethIn.png"  alt="Picture of the author"/><button  onClick={closeCurrentPopup} className='absolute top-[5px] right-[2px] w-[35px] h-[35px]'></button></div></>) : null}
+  {currentPopup === 'ENT Camera' ? (<><div className={`absolute w-[282px] h-[105.15px] right-[18.1rem] ${isChatOpen ? 'bottom-[10.3rem] ' : 'bottom-[6rem]'}`}><Image className=' top-0 left-0' width={476}  height={140.2}  src="/OtoIn.png"  alt="Picture of the author"/><button  onClick={closeCurrentPopup} className='absolute top-[5px] right-[2px] w-[35px] h-[35px]'></button></div></>) : null}
+  {currentPopup === 'Blood Glucose' || currentPopup === 'Blood Pressure' || currentPopup === 'SpO2'  ? (<><div className='absolute top-10 right-8 w-[30px] h-[30px] bg-white opacity-50 rounded-[5px] justify-center items-center  '><button onClick={closeCurrentPopup} className='w-full h-full flex flex-row justify-center items-center'><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M20.9999 3.00007L3 21M2.99992 3L20.9998 20.9999" stroke="black" stroke-width="1.5" stroke-linecap="round"/>
+</svg>
+</button></div></> ): null}
+  {currentPopup === 'Blood' && <IDeal/> }
   {currentPopup === 'Hello' && <IDeal/> }
 </main>
       );
     }
         
 
-
+    // <Image src="/profile.png" width={500}  height={500} alt="Picture of the author"/>
 
 

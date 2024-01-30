@@ -76,11 +76,10 @@ const EcgPopupFrame = (props) => {
 
   return (
     <>
-      {!mainPage && (
-        <div className="relative justify-center flex items-center w-full h-full  text-left text-xs text-black font-manrope ">
+            <div className="relative justify-center flex items-center w-full h-full  text-left text-xs text-black font-manrope ">
           <div className="absolute top-[2rem] left-[0px] bg-[#FAFAFA] w-[100%] h-[75px]" />
           <button
-            className=" absolute cursor-pointer [border:none] p-0 bg-[transparent]  top-[56px] left-[17px] w-[81px] h-[27px]"
+            className=" absolute cursor-pointer [border:none] p-0 bg-[transparent] z-50 top-[56px] left-[17px] w-[81px] h-[27px]"
             onClick={() => router.back()}
           >
             <div className="absolute top-[1px] left-[0px] w-6 h-6">
@@ -98,6 +97,9 @@ const EcgPopupFrame = (props) => {
               ECG
             </div>
           </button>
+      {!mainPage && (
+        <>
+
           <b className="absolute top-[56px] left-center text-xl text-darkslategray-300">
             ECG Test
           </b>
@@ -122,33 +124,14 @@ const EcgPopupFrame = (props) => {
                 12 Lead
               </button>
             </div>
-          </div>
         </div>
+        </>
       )}
+        
 
       {mainPage === 1 && (
         <>
-          <div className="relative justify-center flex items-center w-full h-full  text-left text-xs text-black font-manrope ">
-            <div className="absolute top-[32px] left-[0px] bg-[#FAFAFA] w-[100%] h-[75px]" />
-            <button
-              className="cursor-pointer [border:none] p-0 bg-[transparent] absolute top-[56px] left-[17px] w-[81px] h-[27px]"
-              onClick={() => router.back()}
-            >
-              <div className="absolute top-[1px] left-[0px] w-6 h-6">
-                <div className="absolute top-[0px] left-[0px] w-3 h-3" />
-                <div className="absolute top-[2.5px] left-[5.9px] w-[11.6px] h-[19px]">
-                  <Image
-                    fill={true}
-                    className="absolute top-[2.5px] left-[5.9px] w-[11.6px] h-[19px]"
-                    alt=""
-                    src="/vector-1886.svg"
-                  />
-                </div>
-              </div>
-              <div className="absolute top-[0px] left-[40px] text-xl font-semibold font-manrope text-darkslategray-300 text-left">
-                ECG
-              </div>
-            </button>
+    
             <b className="absolute top-[56px] left-center text-xl text-darkslategray-300">
               2 Lead ECG Test
             </b>
@@ -202,33 +185,12 @@ const EcgPopupFrame = (props) => {
               </div>
             </div>
             {showTestPage && <CanvasAnimationPage />}
-          </div>
         </>
       )}
 
       {mainPage === 2 && (
         <>
-          <div className="relative justify-center flex items-center w-full h-full  text-left text-xs text-black font-manrope ">
-            <div className="absolute top-[32px] left-[0px] bg-[#FAFAFA] w-[100%] h-[75px]" />
-            <button
-              className="cursor-pointer [border:none] p-0 bg-[transparent] absolute top-[56px] left-[17px] w-[81px] h-[27px]"
-              onClick={() => router.back()}
-            >
-              <div className="absolute top-[1px] left-[0px] w-6 h-6">
-                <div className="absolute top-[0px] left-[0px] w-3 h-3" />
-                <div className="absolute top-[2.5px] left-[5.9px] w-[11.6px] h-[19px]">
-                  <Image
-                    fill={true}
-                    className="absolute top-[2.5px] left-[5.9px] w-[11.6px] h-[19px]"
-                    alt=""
-                    src="/vector-1886.svg"
-                  />
-                </div>
-              </div>
-              <div className="absolute top-[0px] left-[40px] text-xl font-semibold font-manrope text-darkslategray-300 text-left">
-                ECG
-              </div>
-            </button>
+        
             <b className="absolute top-[56px] left-center text-xl text-darkslategray-300">
               7 Lead ECG Test
             </b>
@@ -360,33 +322,11 @@ const EcgPopupFrame = (props) => {
               </div>
             </div>
             {showTestPage && <CanvasAnimationPage />}
-          </div>
         </>
       )}
 
       {mainPage === 3 && (
-        <>
-          <div className="relative justify-center flex items-center w-full h-full  text-left text-xs text-black font-manrope ">
-            <div className="absolute top-[32px] left-[0px] bg-[#FAFAFA] w-[100%] h-[75px]" />
-            <button
-              className="cursor-pointer [border:none] p-0 bg-[transparent] absolute top-[56px] left-[17px] w-[81px] h-[27px]"
-              onClick={() => router.back()}
-            >
-              <div className="absolute top-[1px] left-[0px] w-6 h-6">
-                <div className="absolute top-[0px] left-[0px] w-3 h-3" />
-                <div className="absolute top-[2.5px] left-[5.9px] w-[11.6px] h-[19px]">
-                  <Image
-                    fill={true}
-                    className="absolute top-[2.5px] left-[5.9px] w-[11.6px] h-[19px]"
-                    alt=""
-                    src="/vector-1886.svg"
-                  />
-                </div>
-              </div>
-              <div className="absolute top-[0px] left-[40px] text-xl font-semibold font-manrope text-darkslategray-300 text-left">
-                ECG
-              </div>
-            </button>
+       <>
             <b className="absolute top-[56px] left-center text-xl text-darkslategray-300">
               2 Lead ECG Test
             </b>
@@ -531,33 +471,12 @@ const EcgPopupFrame = (props) => {
               </div>
             </div>
             {showTestPage && <CanvasAnimationPage />}
-          </div>
         </>
       )}
 
       {mainPage === 4 && (
         <>
-          <div className="relative justify-center flex items-center w-full h-full  text-left text-xs text-black font-manrope ">
-            <div className="absolute top-[2rem] left-[0px] bg-[#FAFAFA] w-[100%] h-[75px]" />
-            <button
-              className=" absolute cursor-pointer [border:none] p-0 bg-[transparent]  top-[56px] left-[17px] w-[81px] h-[27px]"
-              onClick={() => router.back()}
-            >
-              <div className="absolute top-[1px] left-[0px] w-6 h-6">
-                <div className="absolute top-[0px] left-[0px] w-3 h-3" />
-                <div className="absolute top-[2.5px] left-[5.9px] w-[11.6px] h-[19px]">
-                  <Image
-                    fill={true}
-                    className="absolute top-[2.5px] left-[5.9px] w-[11.6px] h-[19px]"
-                    alt=""
-                    src="/vector-1886.svg"
-                  />
-                </div>
-              </div>
-              <div className="absolute top-[0px] left-[40px] text-xl font-semibold font-manrope text-darkslategray-300 text-left">
-                ECG
-              </div>
-            </button>
+         
             <b className="absolute top-[56px] left-center text-xl text-darkslategray-300">
               ECG Test
             </b>
@@ -568,9 +487,9 @@ const EcgPopupFrame = (props) => {
                 </button>
               </div>
             </div>
-          </div>
         </>
       )}
+        </div>
     </>
   );
 };
