@@ -15,7 +15,10 @@ export default function Page() {
   const [uniqueDates, setUniqueDates] = useState(new Set());
   const [filteredReadings, setFilteredReadings] = useState({});
   const [selectedDate, setSelectedDate] = useState("");
-  const [selectedTime, setSelectedTime] = useState("");
+  const [selectedTime, setSelectedTime] = useState({});
+  // Assuming you're using functional components and hooks
+  const [currentTimeIndex, setCurrentTimeIndex] = useState(0);
+
   const [selectedSensor, setSelectedSensor] = useState("allreadings");
 
   const sensorHeadings = {
@@ -51,7 +54,11 @@ export default function Page() {
       newStructuredReadings[sensor] = {};
 
       readings[sensor].forEach((reading) => {
-        if (reading.readings === undefined || reading.readings === 'undefined' || reading.readings === 'undefined/undefined') 
+        if (
+          reading.readings === undefined ||
+          reading.readings === "undefined" ||
+          reading.readings === "undefined/undefined"
+        )
           return;
 
         const formattedDate = moment(
@@ -95,21 +102,23 @@ export default function Page() {
     }
     setUniqueDates(dates);
     setFilteredReadings(newStructuredReadings);
+    console.log(readings, newStructuredReadings);
   }
 
   //
   const updateSelectedSensor = (sensorKey) => {
     setSelectedSensor(sensorKey);
-
-    if ( filteredReadings[sensorKey]) {
+  
+    if (filteredReadings[sensorKey]) {
       const dates = Object.keys(filteredReadings[sensorKey]).sort();
       if (dates.length > 0) {
         const firstDate = dates[0];
         setSelectedDate(firstDate);
-
+  
         const times = Object.keys(filteredReadings[sensorKey][firstDate]).sort();
         if (times.length > 0) {
           setSelectedTime(times[0]);
+          setCurrentTimeIndex(0); // Reset the currentTimeIndex to 0
         } else {
           setSelectedTime("");
         }
@@ -119,43 +128,7 @@ export default function Page() {
       }
     }
   };
-
-  //
-
-  //
-  function renderTimeButtons() {
-    if (!selectedDate || !filteredReadings) return null;
-
-    let times = new Set();
-    if (selectedSensor === "allreadings") {
-      Object.keys(filteredReadings).forEach((sensorKey) => {
-        const dateReadings = filteredReadings[sensorKey][selectedDate];
-        if (dateReadings) {
-          Object.keys(dateReadings).forEach((time) => {
-            times.add(time);
-          });
-        }
-      });
-    } else {
-      const dateReadings = filteredReadings[selectedSensor][selectedDate];
-      if (dateReadings) {
-        Object.keys(dateReadings).forEach((time) => {
-          times.add(time);
-        });
-      }
-    }
-
-    return Array.from(times).map((time) => (
-      <Button
-        key={time}
-        className=" text-xs px-2 cursor-pointer h-6 rounded-lg"
-        onClick={() => setSelectedTime(time)}
-        variant = { time === selectedTime ? 'default' : 'secondary'}
-      >
-        {time}
-      </Button>
-    ));
-  }
+  
 
   //
 
@@ -175,134 +148,191 @@ export default function Page() {
 
   //cards rendering
   function renderAllReadings() {
-    if (!selectedDate || !selectedTime || !filteredReadings) return null;
+    if (!selectedDate || !filteredReadings) return null;
 
-    const sensorMap = {};
+    let newStructure = {};
+  let timestamps = new Set(); // Set to track unique timestamps
 
-    Object.keys(filteredReadings).forEach((sensorKey) => {
-      const dateReadings = filteredReadings[sensorKey][selectedDate];
-      if (
-        dateReadings &&
-        dateReadings[selectedTime] &&
-        dateReadings[selectedTime].length > 0
-      ) {
-        const sensorReadings = dateReadings[selectedTime];
+  Object.keys(filteredReadings).forEach((sensorType) => {
+    const dates = filteredReadings[sensorType];
+    const times = dates[selectedDate]; // Filter by selected date
+    if (times) {
+      Object.keys(times).forEach((time) => {
+        if (!newStructure[time]) {
+          newStructure[time] = [];
+        }
+        times[time].forEach((reading) => {
+          const readingWithSensorType = { ...reading, sensorType };
+          // Check if the timestamp is already processed
+          if (!timestamps.has(reading.timestamp)) {
+            timestamps.add(reading.timestamp);
+            if (!newStructure[time].some((r) => r.id === reading.id)) {
+              newStructure[time].push(readingWithSensorType);
+            }
+          }
+        });
+      });
+    }
+  });
 
-        sensorMap[sensorKey] = sensorReadings.reduce((acc, reading) => {
-          let isInvalidReading =
-            reading.readings === undefined ||
-            (typeof reading.readings === "string" &&
-              reading.readings.includes("undefined"));
+  const timeKeys = Object.keys(newStructure);
+  if (timeKeys.length === 0 || !timeKeys[currentTimeIndex]) return null;
+  const currentTimeReadings = newStructure[timeKeys[currentTimeIndex]];
+  const bpReadings = currentTimeReadings.filter((reading) => reading.sensorType === "bp");
+  const otherReadings = currentTimeReadings.filter((reading) => reading.sensorType !== "bp");
 
-          if (isInvalidReading) return acc;
 
-          const formattedTimestamp = moment(
-            reading.timestamp,
-            "MMM DD, YYYY at hh:mm:ss A Z"
-          ).format("h:mm A");
-
-          acc[formattedTimestamp] = { ...reading, formattedTimestamp };
-          return acc;
-        }, {});
-      }
-    });
-
-    return Object.keys(sensorMap).map((sensorKey) => (
-      <div
-        key={sensorKey}
-        className="mb-4 bg-white shadow-lg shadow-gray-100 rounded-xl p-4"
-      >
-        <h4 className="text-sm text-gray-400 mb-2">
-          {sensorHeadings[sensorKey]}
-        </h4>
-        <div className="flex  gap-8">
-          {Object.values(sensorMap[sensorKey]).map((reading, index) => (
-            <div key={index} className="flex-none">
-              <p className="text-3xl text-bluetext font-bold">
-                {parseFloat(reading.readings).toFixed(2)}{" "}
-                <span className="text-sm">{sensorunit[sensorKey]}</span>
-              </p>
-            </div>
-          ))}
+    return (
+      <div>
+        {timeKeys.length > 1 && (
+        <div className="flex justify-end items-center gap-2 h-12">
+          <span className="text-sm font-semibold  bg-blue-100 px-2 text-blue-700 rounded-[5px]">{timeKeys[currentTimeIndex]}</span>
+          {currentTimeIndex > 0 && (
+            <button
+              onClick={() => setCurrentTimeIndex((prevIndex) => Math.max(prevIndex - 1, 0))}
+              className="text-2xl text-blue-700 font-bold"
+            >
+              {"<"}
+            </button>
+          )}
+          <p className="font-semibold text-sm bg-gray-200 px-2 rounded-[5px]">
+            {`${currentTimeIndex + 1} of ${timeKeys.length} `}
+          </p>
+          {currentTimeIndex < timeKeys.length - 1 && (
+            <button
+              onClick={() => setCurrentTimeIndex((prevIndex) => Math.min(prevIndex + 1, timeKeys.length - 1))}
+              className="text-2xl text-blue-700 font-bold"
+            >
+              {">"}
+            </button>
+          )}
         </div>
+      )}
+        {bpReadings.map((reading, index) => (
+          <div
+            key={index}
+            className="mb-4 bg-white shadow-lg shadow-gray-100 rounded-xl p-4"
+          >
+            <h4 className="text-sm text-gray-400 mb-2">
+              {sensorHeadings[reading.sensorType]}
+            </h4>
+            <div className="flex gap-8">
+              <div className="flex-none">
+                <p className="text-3xl text-bluetext font-bold">
+                  {reading.readings}
+                  <span className="text-sm">
+                    {sensorunit[reading.sensorType]}
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div>
+        ))}
+        {otherReadings.length > 0 && (
+          <div className="mb-4 bg-white shadow-lg shadow-gray-100 rounded-xl p-4 flex gap-8">
+            {otherReadings.map((reading, index) => (
+              <div
+                key={index}
+                className="flex flex-col justify-center items-center"
+              >
+                <h4 className="text-sm text-gray-400 mb-2">
+                  {sensorHeadings[reading.sensorType]}
+                </h4>
+                <div className="flex-none">
+                  <p className="text-3xl text-bluetext font-bold">
+                    {reading.readings}
+                    <span className="text-sm">
+                      {sensorunit[reading.sensorType]}
+                    </span>
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
-    ));
+    );
   }
 
   //
 
   //
   function renderReadings(sensorKey) {
-
-    if (!selectedDate || !selectedTime || !filteredReadings) {
-      return (
-        <div>
-          Oops ! No data recorded yet
+    if (!selectedDate || !filteredReadings || !filteredReadings[sensorKey]) {
+      return <div>Oops! No data recorded yet</div>;
+    }
+  
+    const timeKeys = Object.keys(filteredReadings[sensorKey][selectedDate] || {});
+    if (timeKeys.length === 0 || !timeKeys[currentTimeIndex]) return null;
+  
+    const uniqueTimestamps = new Set();
+    const currentTimeReadings = filteredReadings[sensorKey][selectedDate][timeKeys[currentTimeIndex]]
+      .filter(reading => {
+        if (uniqueTimestamps.has(reading.timestamp)) {
+          return false;
+        } else {
+          uniqueTimestamps.add(reading.timestamp);
+          return true;
+        }
+      });
+  
+    const currentTime = timeKeys[currentTimeIndex];
+  
+    return (
+      <div>
+        <div className="flex justify-end items-center gap-2 h-12">
+          <span className="text-sm font-semibold  bg-blue-100 px-2 text-blue-700 rounded-[5px]">{currentTime}</span>
+          {currentTimeIndex > 0 && (
+            <button
+              onClick={() => setCurrentTimeIndex((prevIndex) => Math.max(prevIndex - 1, 0))}
+              className="text-2xl text-blue-700 font-bold"
+            >
+              {"<"}
+            </button>
+          )}
+          <p className="font-semibold text-sm bg-gray-200 px-2 rounded-[5px]">
+            {`${currentTimeIndex + 1} of ${timeKeys.length}`}
+          </p>
+          {currentTimeIndex < timeKeys.length - 1 && (
+            <button
+              onClick={() => setCurrentTimeIndex((prevIndex) => Math.min(prevIndex + 1, timeKeys.length - 1))}
+              className="text-2xl  text-blue-700 font-bold"
+            >
+              {">"}
+            </button>
+          )}
         </div>
-      )
-    }
-
-    const sensorMap = {};
-
-    const dateReadings = filteredReadings[sensorKey][selectedDate];
-    if (
-      dateReadings &&
-      dateReadings[selectedTime] &&
-      dateReadings[selectedTime].length > 0
-    ) {
-      const sensorReadings = dateReadings[selectedTime];
-
-      sensorMap[sensorKey] = sensorReadings.reduce((acc, reading) => {
-        let isInvalidReading =
-          reading.readings === undefined ||
-          (typeof reading.readings === "string" &&
-            reading.readings.includes("undefined"));
-
-        if (isInvalidReading) return acc;
-
-        const formattedTimestamp = moment(
-          reading.timestamp,
-          "MMM DD, YYYY at hh:mm:ss A Z"
-        ).format("h:mm A");
-
-        acc[formattedTimestamp] = reading;
-        return acc;
-      }, {});
-    }
-
-    return Object.keys(sensorMap).map((sensorKey) => (
-      <div
-        key={sensorKey}
-        className="mb-4 bg-white shadow-lg shadow-gray-100 rounded-xl p-4"
-      >
-        <h4 className="text-sm text-gray-400 mb-2">
-          {sensorHeadings[sensorKey]}
-        </h4>
-        <div className="flex  gap-8">
-          {Object.values(sensorMap[sensorKey]).map((reading, index) => (
-            <div key={index} className="flex-none">
-              <p className="text-3xl text-bluetext font-bold">
-                {parseFloat(reading.readings).toFixed(2)}{" "}
-                <span className="text-sm">{sensorunit[sensorKey]}</span>
-              </p>
+        {currentTimeReadings.map((reading, index) => (
+          <div key={index} className="mb-4 bg-white shadow-lg shadow-gray-100 rounded-xl p-4">
+            <h4 className="text-sm text-gray-400 mb-2">
+              {sensorHeadings[sensorKey]}
+            </h4>
+            <div className="flex gap-8">
+              <div className="flex-none">
+                <p className="text-3xl text-bluetext font-bold">
+                  {reading.readings}
+                  <span className="text-sm">{sensorunit[sensorKey]}</span>
+                </p>
+              </div>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
-    ));
+    );
   }
+  
+  
+
   //
 
   return (
     <main className="p-4 pt-8 bg-lightblue h-screen w-screen flex flex-col justify-around">
       <div className="flex justify-between">
-        <Link 
-        href ='/dashboard'
-        >
-        <span className="flex justify-center items-center gap-2">
-          <Image src={arrow_left} alt="left_arrow" className="h-4" />
-          <h2 className="text-bluetext font-bold">Your Last Readings</h2>
-        </span>
+        <Link href="/dashboard">
+          <span className="flex justify-center items-center gap-2">
+            <Image src={arrow_left} alt="left_arrow" className="h-4" />
+            <h2 className="text-bluetext font-bold">Your Last Readings</h2>
+          </span>
         </Link>
         <Button>Share</Button>
       </div>
@@ -333,11 +363,8 @@ export default function Page() {
               </span>
               <Button className="w-2">{`>`}</Button>
             </div>
-            <div className="flex overflow-x-auto h-[3rem] w-max justify-between items-center gap-2">
-              {renderTimeButtons()}
-            </div>
             <TabsContent value="allreadings">
-              <div className="flex justify-between flex-col bg-[#F9F9F9] rounded-xl p-2 gap-4 overflow-y-auto h-[20rem]">
+              <div className="flex justify-between flex-col bg-[#F9F9F9] rounded-xl p-2 pt-0  gap-4  h-[23rem]">
                 {renderAllReadings()}
               </div>
             </TabsContent>
@@ -345,7 +372,7 @@ export default function Page() {
             {Object.keys(filteredReadings).map((sensorKey) => {
               return (
                 <TabsContent key={sensorKey} value={sensorKey}>
-                  <div className="flex justify-between flex-col bg-[#F9F9F9] rounded-xl p-2 gap-4 overflow-y-auto h-[20rem]">
+                  <div className="flex justify-between flex-col bg-[#F9F9F9] rounded-xl p-2 pt-0 gap-4 overflow-y-auto h-[20rem]">
                     {renderReadings(sensorKey)}
                   </div>
                 </TabsContent>
