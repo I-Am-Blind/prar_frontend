@@ -43,7 +43,7 @@ import { NORMAL_VALUES } from "@/Config/vitalManager";
       <div className="flex justify-between px-8 py-0 h-full w-full">
         {/* Blood Pressure */}
         <div className="flex flex-col last-readings-container">
-          <h3 className="vital-name">Blood Pressure</h3>
+          <div className="vital-name">Blood Pressure</div>
           <p className={`${getColorClass('bloodPressure', vitals[0])} vital-value`}>{vitals[0] !== 'undefined' ? vitals[0] : 'N/A'}</p>
           <p className="vital-unit">mm Hg</p>
         </div>
@@ -68,15 +68,15 @@ import { NORMAL_VALUES } from "@/Config/vitalManager";
           <Tabs defaultValue="fahrenheit" className="w-full ">           
               <div className="p-2 vital-value">
                 <TabsContent value="fahrenheit">
-                    <h2 className={`${getColorClass('bodyTemp', vitals[3])}`}>{vitals[3] ? ctof(vitals[3]) : 'N/A'}°F</h2>
+                    <h2 className={`${getColorClass('bodyTemp', vitals[3])} vital-value`}>{vitals[3] ? ctof(vitals[3]) : 'N/A'}°F</h2>
                 </TabsContent>
                 <TabsContent value="celsius">
-                    <h2 className={`${getColorClass('bodyTemp', vitals[3])}`}>{vitals[3] ? vitals[3] : 'N/A'}°C</h2>
+                    <h2 className={`${getColorClass('bodyTemp', vitals[3])} vital-value`}>{vitals[3] ? vitals[3] : 'N/A'}°C</h2>
                 </TabsContent>
                 </div>
-              <TabsList className="text-primtext bg-lightblue">
-                <TabsTrigger value="fahrenheit">F</TabsTrigger>
-                <TabsTrigger value="celsius">C</TabsTrigger>
+              <TabsList className="text-primtext  bg-lightblue h-8 w-22.5 rounded-5 vital-unit">
+                <TabsTrigger value="fahrenheit">° F</TabsTrigger>
+                <TabsTrigger value="celsius">° C</TabsTrigger>
               </TabsList>
             </Tabs>
         </div>
