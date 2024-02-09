@@ -67,7 +67,7 @@
   }
 
   .vital-name{
-    @apply font-semibold text-lg
+    @apply font-bold text-base
   }
   
   .vital-value{
@@ -75,7 +75,7 @@
   }
 
   .vital-unit{
-    @apply font-sans text-xs
+    @apply  text-base
   }
 
   .last-readings-container{

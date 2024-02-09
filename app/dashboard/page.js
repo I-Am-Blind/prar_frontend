@@ -72,11 +72,12 @@ export default function Dashboard() {
   };
 
   return (
-    <main className="h-screen w-screen flex flex-col p-4 mt-8 ">
+    <main className="h-screen w-screen  flex overflow-hidden	 flex-col p-4  ">
+      <div className="relative  top-8 h-screen-minus-2rem  w-full">
       <section className="top-section w-full h-[15%]">
         <DashboardSettings handleLogout={handleLogout} />
       </section>
-      <section className="middle-section w-full h-[40%] grid grid-cols-3 grid-rows-3 gap-4">
+      <section className="middle-section w-full h-[40%] grid grid-cols-3 grid-rows-3 px-2 gap-4">
         <div className="row-span-3 col-span-2 card-1 flex gap-4">
           <div className="h-full w-[60%] flex flex-col items-start justify-center">
             <span className="w-full flex justify-between items-center">
@@ -171,10 +172,10 @@ export default function Dashboard() {
           <Image alt="img" src={right_arrow_blue} />
         </Link>
       </section>
-      <section className="bottom-section w-full h-[40%] flex justify-center items-center ">
+      <section className="bottom-section w-full h-[40%] px-2 mt-1 flex justify-center items-center ">
         <div className="card-1 w-full h-[90%] grid grid-cols-8 grid-rows-4 p-0">
-          <h3 className="col-span-7 h-4 label-1 mx-8">Your Last Readings</h3>
-          <div className="vitals-container col-span-7 h-full">
+          <div className="col-span-7 h-4 font-bold opacity-30	text-[#2C2C2C] text-base mx-8">Your Last Readings</div>
+          <div className="relative top-3 vitals-container col-span-7 h-full">
             <DashboardReadings vitals={lastreadings} />
           </div>
           <button className="previous-scans justify-center items-center col-start-8 row-span-4 row-start-1 flex flex-col gap-4 border-primary border-[1px] h-full rounded-e-xl p-4 ">
@@ -194,6 +195,7 @@ export default function Dashboard() {
           
         </div>
       </section>
+      </div>
     </main>
   );
 }
