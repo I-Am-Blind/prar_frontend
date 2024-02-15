@@ -23,11 +23,11 @@ const EcgPopupFrame = (props) => {
   const [dynamicProps, setDynamicProps] = useState({});
   const [optionSelected, setOptionSelected] = useState(null);
   const socketRef = useRef(null); // Using ref to persist socket instance
-  const [mode,setMode]= useState({});
   const [ecgValue, setEcgValue] = useState(null); // Initial state
 
 
-
+const [mode,setMode]= useState({});
+    
 const [v1, setV1] = useState([]);
 const [v2, setV2] = useState([]);
 const [v3, setV3] = useState([]);
