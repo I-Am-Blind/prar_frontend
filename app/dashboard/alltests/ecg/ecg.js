@@ -11,7 +11,7 @@ export default function CanvasAnimationPage() {
     const socketRef = useRef(null); // Using ref to persist socket instance
 
 
-    const SOCKET_URL = 'http://localhost:5000';
+    const SOCKET_URL = 'http://localhost:5005';
 
     useEffect(() => {
         // Initialize socket connection
