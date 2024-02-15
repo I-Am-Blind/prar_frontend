@@ -21,7 +21,19 @@ export default function Page() {
   const router = useRouter();
   const buttonLayout = (sensor,img,url)=>{
     return (
-     <button className="card-1 px-6 flex justify-between  items-center w-96 h-20 " onClick={()=>{router.push(url)}}>
+     <button className="card-1 px-6 flex justify-between  items-center w-96 h-20 " onClick={()=>{router.push('/dashboard/alltests/graph/' + url)}}>
+      <span className="flex justify-center items-center gap-4">
+        <Image src={img} alt={url} />
+        <span className="text-lg font-bold text-primtext">{sensor}</span>
+      </span>
+      <Image src={right_arrow} alt='test' />
+      </button>
+    )
+   }
+
+   const buttonLayout2 = (sensor,img,url)=>{
+    return (
+     <button className="card-1 px-6 flex justify-between  items-center w-96 h-20 " onClick={()=>{router.push('/dashboard/alltests/' + url)}}>
       <span className="flex justify-center items-center gap-4">
         <Image src={img} alt={url} />
         <span className="text-lg font-bold text-primtext">{sensor}</span>
@@ -42,13 +54,13 @@ export default function Page() {
         <h2>All Tests</h2>
       </button>
       <div className="w-full flex  flex-wrap gap-y-4 gap-x-8  justify-center items-center">
-        {buttonLayout("ECG",ecg,'/dashboard/alltests/ecg')}
-        {buttonLayout("Blood Glucose",bg,'/dashboard/alltests/bloodglucose')}
-        {buttonLayout("Heart Rate & Spo2",hr,'/dashboard/alltests/heartrate')}
-        {buttonLayout("Digital Stethoscope",sthetho,'/dashboard/alltests/stethoscope')}
-        {buttonLayout("Blood Pressure",bp,'/dashboard/alltests/bloodpressure')}
-        {buttonLayout("Body Temperature",bt,'/dashboard/alltests/temperature')}
-        {buttonLayout("ENT",ent,'/dashboard/alltests/otoscope')}
+        {buttonLayout("ECG",ecg,'ecg')}
+        {buttonLayout("Blood Glucose",bg,'bg')}
+        {buttonLayout("Heart Rate & Spo2",hr,'hr')}
+        {buttonLayout2("Digital Stethoscope",sthetho,'stethoscope')}
+        {buttonLayout("Blood Pressure",bp,'bp')}
+        {buttonLayout("Body Temperature",bt,'t')}
+        {buttonLayout2("ENT",ent,'otoscope')}
       </div>
     </main>
   );

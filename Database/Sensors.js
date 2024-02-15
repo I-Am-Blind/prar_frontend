@@ -15,11 +15,14 @@ export const StoreReadings = async (userId, sensor, readings) => {
     }
   };
 
-  export const GetReadings = async (sensor) => {
+  export const GetReadings = async (sensor = null) => {
     try {
       const db = getDbInstance();
-
-      const sensors = ['bp', 'bg', 't', 'hr', 'sp']
+      let sensors = [];
+      if (sensor)
+       sensors = [sensor]
+    else 
+       sensors = ['bp', 'bg', 't', 'hr', 'sp']
       const allReadings = {}
 
       for (const sensor of sensors) {
