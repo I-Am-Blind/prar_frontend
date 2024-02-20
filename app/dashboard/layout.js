@@ -33,7 +33,16 @@ export default function RootLayout({ children }) {
       ) : (
         <main className="h-screen w-screen flex flex-col p-4">
           <div className="w-full h-full flex flex-col justify-center items-center gap-4">
-            <h1>Please sign In to continue</h1>
+            <h1>Please sign up to continue</h1>
+            {users?.length === 0 && (
+              
+              <Link
+                  href={`/signup`}
+                  passHref
+                >
+                  <Button>Sign Up</Button>
+                </Link>
+            )}
             <div className="flex gap-4">
             {users?.map((user) => {
               return (

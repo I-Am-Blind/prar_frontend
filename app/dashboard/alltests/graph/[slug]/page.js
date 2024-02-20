@@ -14,11 +14,12 @@ export default function Page({ params }) {
   const chartContainerRef = useRef(null); // Ref for the canvas container
 
   const slugtourl = {
-    bp : 'bloodpressure',
-    bg : 'bloodglucose',
-    sp : 'heartrate',
-    hr : 'heartrate'
-  }
+    bp: "bloodpressure",
+    bg: "bloodglucose",
+    sp: "heartrate",
+    hr: "heartrate",
+    t: "temperature",
+  };
 
   useEffect(() => {
     async function getlastreadings() {
@@ -33,8 +34,9 @@ export default function Page({ params }) {
           "MMM DD, YYYY at h:mm:ss A Z"
         ).format("lll");
         labels.push(timestamp);
-        if (params.slug !== "bp") data.push(reading.readings);
-        else {
+        if (params.slug !== "bp") {
+          data.push(reading.readings);
+        } else {
           const [systolic, diastolic] = reading.readings
             .split("/")
             .map((value) => parseInt(value, 10));
@@ -52,7 +54,6 @@ export default function Page({ params }) {
       }
 
       let datasets;
-      console.log(data, data1);
       if (params.slug !== "bp") {
         datasets = [
           {
@@ -81,7 +82,7 @@ export default function Page({ params }) {
           },
         ];
       }
-
+console.log(labels)
       chartRef.current = new Chart(ctx, {
         type: "line",
         data: {
@@ -95,7 +96,7 @@ export default function Page({ params }) {
               time: {
                 parser: "lll", // Adjust if necessary to match the input format
                 tooltipFormat: "ll HH:mm", // Display hours and minutes in tooltip
-                unit: "hour", // Display labels in hourly increments
+                unit: "minute", // Display labels in hourly increments
                 displayFormats: {
                   hour: "MMM D, hA", // Customize as needed (e.g., 'hA' for hourly labels like '3PM')
                 },
@@ -121,8 +122,14 @@ export default function Page({ params }) {
 
   return (
     <main className="w-screen h-screen py-10 px-4 flex flex-col gap-4 justify-center items-center">
-      <Button onClick={()=>{router.push('/dashboard/alltests/' + slugtourl[params.slug])}}>Initiate test</Button>
-      <div className="w-[50rem] h-max border border-gray-400 pt-0 rounded-xl shadow-xl">
+      <Button
+        onClick={() => {
+          router.push("/dashboard/alltests/" + slugtourl[params.slug]);
+        }}
+      >
+        Initiate test
+      </Button>
+      <div className="w-[50rem] h-max border border-gray-400 pt-0 rounded-xl shadow-xl p-4">
         <canvas id="myChart" ref={chartContainerRef}></canvas>
       </div>
     </main>

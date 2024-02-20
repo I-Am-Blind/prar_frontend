@@ -16,26 +16,30 @@ const Reading = ({
     'Heart Rate' : 'hr',
     'Spo2' : 'sp',
     'Blood Glucose' : 'bg',
+    'Body Temperature' : 't',
   }
 
 useEffect(() => {
-  if ( userId  && results)
+  async function storeresults() {
+    if ( userId  && results)
     {
       if ( results[0]?.name === 'Systolic' || results[0]?.name === 'Diastolic')
            {
-            StoreReadings(userId, 'bp', `${results[0].value}/${results[1].value}`)
-            StoreSensorData(userId, 'bp', `${results[0].value}/${results[1].value}`)
+            await StoreReadings(userId, 'bp', `${results[0].value}/${results[1].value}`)
+            console.log(await StoreSensorData(userId, 'bp', `${results[0].value}/${results[1].value}`))
            }  else {
             results.forEach(result => {
                   if (result.name && result.value) {                   
-                      console.log(userId, db_id[result.name], result.value)
                       StoreReadings(userId, db_id[result.name], result.value)
                       StoreSensorData(userId, db_id[result.name], result.value)
                   }
               })
            }
     }
-    
+  }
+
+  storeresults();
+   
 }, [])
 
 

@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
 //Assets Import
 import left_arrow from "@/public/assets/left_small_arrow_black.svg";
@@ -48,7 +47,7 @@ export default function Page() {
     <main className="h-screen w-screen py-8 px-4 flex flex-col justify-around">
       <button
         className="flex  justify-center items-center gap-2 w-28 font-bold "
-        onClick={() => router.back()}
+        onClick={() => router.push('/dashboard')}
       >
         <Image src={left_arrow} alt='test' className="h-4" />
         <h2>All Tests</h2>

@@ -28,6 +28,9 @@ export const instructions = {
     "wash your hands with soap and warm water, and dry them thoroughly. ",
     "Insert your finger into the device, ensuring it fits snugly with the sensor on the underside of the device. It’s recommended to use your index or middle finger.",
     "Wait for a few seconds until the oximeter detects your pulse and displays your SpO2 level and pulse rate."
+  ],
+  t: [
+    'Point the device to your forehead or inner ear, and press “start”.'
   ]
 };
 
@@ -35,6 +38,6 @@ export const instructions = {
 export const sensor_images = {
   bp: [bp1,bp2,bp3,bp4,bp5],
   bg: [bg1,bg2],
-  hr: [hr1,hr2,hr3]
-
+  hr: [hr1,hr2,hr3],
+  t : [bp2]
 }

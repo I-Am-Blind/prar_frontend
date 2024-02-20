@@ -8,6 +8,7 @@ import Reading from "./Reading";
 import { commands } from "../../Sensor Config/commands";
 import { disconnectFromPort } from "../../Sensor Config/SerialFunctions";
 import { UserDataManager } from "@/Config/userManager";
+import { useRouter } from "next/navigation";
 
 const BpSensorPopup = ({ heading, instructions, sensor_images, toast }) => {
 
@@ -22,6 +23,7 @@ const BpSensorPopup = ({ heading, instructions, sensor_images, toast }) => {
   const sensorscompleted= useRef(false);
   const [sensorresults, setsensorresults] = useState([]);
   const userDataManager = new UserDataManager();
+  const router = useRouter();
 
   const readData = async () => {
     try {
@@ -171,10 +173,13 @@ const BpSensorPopup = ({ heading, instructions, sensor_images, toast }) => {
             <Button
               className="w-44 h-12 shadow-xl shadow-gray-200 "
               variant="outline"
+              onClick={() => router.push('/dashboard/alltests/bloodpressure')}
             >
               Check Again
             </Button>
-            <Button className="w-44 h-12 shadow-lg shadow-blue-200 ">
+            <Button className="w-44 h-12 shadow-lg shadow-blue-200 "
+           onClick={() => router.push('/dashboard/alltests')}
+            >
               Done
             </Button>
           </div>

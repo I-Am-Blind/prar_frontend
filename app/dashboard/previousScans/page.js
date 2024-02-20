@@ -32,7 +32,7 @@ export default function Page() {
   const sensorunit = {
     bp: "mm/Hg",
     bg: "Mg/Dl",
-    t: "F",
+    t: "°C",
     hr: "BPM",
     sp: "%",
   };
@@ -40,6 +40,7 @@ export default function Page() {
   useEffect(() => {
     async function getlastreadings() {
       const readings = await GetReadings();
+      console.log(readings)
       setreadings(readings);
       extractUniqueDates(readings);
     }
@@ -348,13 +349,14 @@ export default function Page() {
             {renderTabsTriggers()}
           </TabsList>
           <div className="flex flex-col w-full h-full">
-            <div className="flex overflow-x-auto h-[3rem] w-full justify-between items-center gap-4">
+            <div className="flex overflow-x-auto h-[3rem] w-full justify-between items-center">
               <Button className="w-2">{`<`}</Button>
-              <span>
+              <span className="flex gap-2 scale-90">
                 {[...uniqueDates].map((date) => (
                   <Button
                     key={date}
                     className=" px-2  cursor-pointer"
+                    variant = {`${selectedDate === date ? '' : 'secondary'}`}
                     onClick={() => setSelectedDate(date)}
                   >
                     {date}

@@ -13,6 +13,7 @@ async function StoreSensorData(userId, sensor, value) {
       `${process.env.NEXT_PUBLIC_SERVER_URL}/sensordata`,
       {  userId: userId, sensor: sensor, data: data }
     );
+    console.log('updated Sensordata to online db')
     return response?.data
   } catch (error) {
     console.log(error)

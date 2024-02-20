@@ -9,6 +9,8 @@ import DashboardReadings from "@/components/DashboardReadings";
 import { DashboardSettings } from "@/components/DashboardSettings";
 import { useToast } from "@/components/ui/use-toast";
 import UserDataContext from "@/Context/UserDataContext";
+import calculateHealthScores from "@/components/HealthScore"
+import CustomChart from "@/components/CustomChart"
 //Assets Import
 import sensors_svg from "@/public/assets/dash_svg_1.svg";
 import right_arrow_white_svg from "@/public/assets/right_arrow_white.svg";
@@ -20,7 +22,7 @@ import Link from "next/link";
 //Assets Import
 import { ref, onValue, off } from "firebase/database";
 import { db } from "@/Config/firebaseconfig";
-import { GetLastReadings } from '@/Database/Sensors'
+import { GetLastReadings, GetReadings } from '@/Database/Sensors'
 
 export default function Dashboard() {
   const { userdata, datamanager, updateUserData } = useContext(UserDataContext);
@@ -29,8 +31,22 @@ export default function Dashboard() {
   const [appointments, setappointments] = useState(
     data?.user?.upcoming_appointments
   );
-  const { toast } = useToast();
+  const [score, setscore] = useState();
+  const [labels, setlabels] = useState();
+  
   useEffect(() => {
+    async function getlastreadings() {
+      const readings = await GetReadings();
+      const [dates, healthScores] = calculateHealthScores(readings);
+      setscore(healthScores);
+      setlabels(dates);
+    }
+    getlastreadings();
+  }, []);
+
+  
+  // const { toast } = useToast();
+   useEffect(() => {
     // toast({
     //   title: "Sign In Successful",
     //   description: `${data?.user?.name} signed in `,
@@ -52,7 +68,7 @@ export default function Dashboard() {
         `${readings?.bp[0]?.readings}`,
         readings?.hr[0]?.readings,
         readings?.sp[0]?.readings,
-        37,
+        readings?.t[0]?.readings,
         readings?.bg[0]?.readings,
       ])
     }
@@ -98,7 +114,7 @@ export default function Dashboard() {
               </span>
             </span>
             <span className="w-full bg-slate-200 rounded-2xl p-2 mt-2 h-full">
-              Graph Here
+              {score && labels && <CustomChart data={score} labels={labels} />}
             </span>
           </div>
           <div className="h-full w-[40%]">
@@ -147,7 +163,8 @@ export default function Dashboard() {
                 </div>
               </TabsContent>
               <TabsContent value="consult">
-                Do you want to consult a doctor?
+                <h2 className="mb-2">Do you want to consult a doctor?</h2>
+                <Link href="/tele"><Button>Join</Button></Link>
               </TabsContent>
             </Tabs>
           </div>
