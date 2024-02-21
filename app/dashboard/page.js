@@ -113,7 +113,7 @@ export default function Dashboard() {
                 ))}
               </span>
             </span>
-            <span className="w-full bg-slate-200 rounded-2xl p-2 mt-2 h-full">
+            <span className="w-full rounded-2xl mt-2 h-full">
               {score && labels && <CustomChart data={score} labels={labels} />}
             </span>
           </div>

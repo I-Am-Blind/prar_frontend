@@ -2,9 +2,11 @@
 
 import { GetReadings } from "@/Database/Sensors";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import moment from "moment";
+import "chartjs-adapter-moment";
+import Chart from "chart.js/auto";
 
 import arrow_left from "@/public/assets/left_small_arrow_blue.svg";
 import Image from "next/image";
@@ -16,8 +18,9 @@ export default function Page() {
   const [filteredReadings, setFilteredReadings] = useState({});
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState({});
-  // Assuming you're using functional components and hooks
   const [currentTimeIndex, setCurrentTimeIndex] = useState(0);
+  const chartRef = useRef(null); // Ref for chart instance
+  const chartContainerRef = useRef(null);
 
   const [selectedSensor, setSelectedSensor] = useState("allreadings");
 
@@ -40,7 +43,7 @@ export default function Page() {
   useEffect(() => {
     async function getlastreadings() {
       const readings = await GetReadings();
-      console.log(readings)
+      console.log(readings);
       setreadings(readings);
       extractUniqueDates(readings);
     }
@@ -109,14 +112,16 @@ export default function Page() {
   //
   const updateSelectedSensor = (sensorKey) => {
     setSelectedSensor(sensorKey);
-  
+
     if (filteredReadings[sensorKey]) {
       const dates = Object.keys(filteredReadings[sensorKey]).sort();
       if (dates.length > 0) {
         const firstDate = dates[0];
         setSelectedDate(firstDate);
-  
-        const times = Object.keys(filteredReadings[sensorKey][firstDate]).sort();
+
+        const times = Object.keys(
+          filteredReadings[sensorKey][firstDate]
+        ).sort();
         if (times.length > 0) {
           setSelectedTime(times[0]);
           setCurrentTimeIndex(0); // Reset the currentTimeIndex to 0
@@ -129,7 +134,6 @@ export default function Page() {
       }
     }
   };
-  
 
   //
 
@@ -152,63 +156,74 @@ export default function Page() {
     if (!selectedDate || !filteredReadings) return null;
 
     let newStructure = {};
-  let timestamps = new Set(); // Set to track unique timestamps
+    let timestamps = new Set(); // Set to track unique timestamps
 
-  Object.keys(filteredReadings).forEach((sensorType) => {
-    const dates = filteredReadings[sensorType];
-    const times = dates[selectedDate]; // Filter by selected date
-    if (times) {
-      Object.keys(times).forEach((time) => {
-        if (!newStructure[time]) {
-          newStructure[time] = [];
-        }
-        times[time].forEach((reading) => {
-          const readingWithSensorType = { ...reading, sensorType };
-          // Check if the timestamp is already processed
-          if (!timestamps.has(reading.timestamp)) {
-            timestamps.add(reading.timestamp);
-            if (!newStructure[time].some((r) => r.id === reading.id)) {
-              newStructure[time].push(readingWithSensorType);
-            }
+    Object.keys(filteredReadings).forEach((sensorType) => {
+      const dates = filteredReadings[sensorType];
+      const times = dates[selectedDate]; // Filter by selected date
+      if (times) {
+        Object.keys(times).forEach((time) => {
+          if (!newStructure[time]) {
+            newStructure[time] = [];
           }
+          times[time].forEach((reading) => {
+            const readingWithSensorType = { ...reading, sensorType };
+            // Check if the timestamp is already processed
+            if (!timestamps.has(reading.timestamp)) {
+              timestamps.add(reading.timestamp);
+              if (!newStructure[time].some((r) => r.id === reading.id)) {
+                newStructure[time].push(readingWithSensorType);
+              }
+            }
+          });
         });
-      });
-    }
-  });
+      }
+    });
 
-  const timeKeys = Object.keys(newStructure);
-  if (timeKeys.length === 0 || !timeKeys[currentTimeIndex]) return null;
-  const currentTimeReadings = newStructure[timeKeys[currentTimeIndex]];
-  const bpReadings = currentTimeReadings.filter((reading) => reading.sensorType === "bp");
-  const otherReadings = currentTimeReadings.filter((reading) => reading.sensorType !== "bp");
-
+    const timeKeys = Object.keys(newStructure);
+    if (timeKeys.length === 0 || !timeKeys[currentTimeIndex]) return null;
+    const currentTimeReadings = newStructure[timeKeys[currentTimeIndex]];
+    const bpReadings = currentTimeReadings.filter(
+      (reading) => reading.sensorType === "bp"
+    );
+    const otherReadings = currentTimeReadings.filter(
+      (reading) => reading.sensorType !== "bp"
+    );
 
     return (
       <div>
         {timeKeys.length > 1 && (
-        <div className="flex justify-end items-center gap-2 h-12">
-          <span className="text-sm font-semibold  bg-blue-100 px-2 text-blue-700 rounded-[5px]">{timeKeys[currentTimeIndex]}</span>
-          {currentTimeIndex > 0 && (
-            <button
-              onClick={() => setCurrentTimeIndex((prevIndex) => Math.max(prevIndex - 1, 0))}
-              className="text-2xl text-blue-700 font-bold"
-            >
-              {"<"}
-            </button>
-          )}
-          <p className="font-semibold text-sm bg-gray-200 px-2 rounded-[5px]">
-            {`${currentTimeIndex + 1} of ${timeKeys.length} `}
-          </p>
-          {currentTimeIndex < timeKeys.length - 1 && (
-            <button
-              onClick={() => setCurrentTimeIndex((prevIndex) => Math.min(prevIndex + 1, timeKeys.length - 1))}
-              className="text-2xl text-blue-700 font-bold"
-            >
-              {">"}
-            </button>
-          )}
-        </div>
-      )}
+          <div className="flex justify-end items-center gap-2 h-12">
+            <span className="text-sm font-semibold  bg-blue-100 px-2 text-blue-700 rounded-[5px]">
+              {timeKeys[currentTimeIndex]}
+            </span>
+            {currentTimeIndex > 0 && (
+              <button
+                onClick={() =>
+                  setCurrentTimeIndex((prevIndex) => Math.max(prevIndex - 1, 0))
+                }
+                className="text-2xl text-blue-700 font-bold"
+              >
+                {"<"}
+              </button>
+            )}
+            <p className="font-semibold text-sm bg-gray-200 px-2 rounded-[5px]">
+              {`${currentTimeIndex + 1} of ${timeKeys.length} `}
+            </p>
+            {currentTimeIndex < timeKeys.length - 1 && (
+              <button
+                onClick={() =>
+                  setCurrentTimeIndex((prevIndex) =>
+                    Math.min(prevIndex + 1, timeKeys.length - 1)
+                  )
+                }
+                className="text-2xl text-blue-700 font-bold"
+              >
+                {">"}
+              </button>
+            )}
+          </div>
+        )}
         {bpReadings.map((reading, index) => (
           <div
             key={index}
@@ -262,30 +277,37 @@ export default function Page() {
     if (!selectedDate || !filteredReadings || !filteredReadings[sensorKey]) {
       return <div>Oops! No data recorded yet</div>;
     }
-  
-    const timeKeys = Object.keys(filteredReadings[sensorKey][selectedDate] || {});
+
+    const timeKeys = Object.keys(
+      filteredReadings[sensorKey][selectedDate] || {}
+    );
     if (timeKeys.length === 0 || !timeKeys[currentTimeIndex]) return null;
-  
+
     const uniqueTimestamps = new Set();
-    const currentTimeReadings = filteredReadings[sensorKey][selectedDate][timeKeys[currentTimeIndex]]
-      .filter(reading => {
-        if (uniqueTimestamps.has(reading.timestamp)) {
-          return false;
-        } else {
-          uniqueTimestamps.add(reading.timestamp);
-          return true;
-        }
-      });
-  
+    const currentTimeReadings = filteredReadings[sensorKey][selectedDate][
+      timeKeys[currentTimeIndex]
+    ].filter((reading) => {
+      if (uniqueTimestamps.has(reading.timestamp)) {
+        return false;
+      } else {
+        uniqueTimestamps.add(reading.timestamp);
+        return true;
+      }
+    });
+
     const currentTime = timeKeys[currentTimeIndex];
-  
+
     return (
       <div>
         <div className="flex justify-end items-center gap-2 h-12">
-          <span className="text-sm font-semibold  bg-blue-100 px-2 text-blue-700 rounded-[5px]">{currentTime}</span>
+          <span className="text-sm font-semibold  bg-blue-100 px-2 text-blue-700 rounded-[5px]">
+            {currentTime}
+          </span>
           {currentTimeIndex > 0 && (
             <button
-              onClick={() => setCurrentTimeIndex((prevIndex) => Math.max(prevIndex - 1, 0))}
+              onClick={() =>
+                setCurrentTimeIndex((prevIndex) => Math.max(prevIndex - 1, 0))
+              }
               className="text-2xl text-blue-700 font-bold"
             >
               {"<"}
@@ -296,7 +318,11 @@ export default function Page() {
           </p>
           {currentTimeIndex < timeKeys.length - 1 && (
             <button
-              onClick={() => setCurrentTimeIndex((prevIndex) => Math.min(prevIndex + 1, timeKeys.length - 1))}
+              onClick={() =>
+                setCurrentTimeIndex((prevIndex) =>
+                  Math.min(prevIndex + 1, timeKeys.length - 1)
+                )
+              }
               className="text-2xl  text-blue-700 font-bold"
             >
               {">"}
@@ -304,7 +330,10 @@ export default function Page() {
           )}
         </div>
         {currentTimeReadings.map((reading, index) => (
-          <div key={index} className="mb-4 bg-white shadow-lg shadow-gray-100 rounded-xl p-4">
+          <div
+            key={index}
+            className="mb-4 bg-white shadow-lg shadow-gray-100 rounded-xl p-4"
+          >
             <h4 className="text-sm text-gray-400 mb-2">
               {sensorHeadings[sensorKey]}
             </h4>
@@ -321,8 +350,115 @@ export default function Page() {
       </div>
     );
   }
-  
-  
+
+  function chart(sensor) {
+    const sensorReadings = readings[sensor];
+    let labels = [];
+    let data = [];
+    let data1 = [];
+    sensorReadings?.forEach((reading) => {
+      const timestamp = moment(
+        reading.timestamp,
+        "MMM DD, YYYY at h:mm:ss A Z"
+      ).format("lll");
+      labels.push(timestamp);
+      if (sensor !== "bp") {
+        data.push(reading.readings);
+      } else {
+        const [systolic, diastolic] = reading.readings
+          .split("/")
+          .map((value) => parseInt(value, 10));
+
+        if (typeof systolic === "number") data.push(systolic);
+        if (typeof diastolic === "number") data1.push(diastolic);
+      }
+    });
+
+    if (!chartContainerRef.current) return;
+
+    const ctx = chartContainerRef.current.getContext("2d");
+    if (chartRef.current) {
+      chartRef.current.destroy(); // Destroy the previous instance if it exists
+    }
+
+    let datasets;
+    if (sensor !== "bp") {
+      datasets = [
+        {
+          data: data, // Readings for the y-axis
+          label: "Readings",
+          borderColor: "#2563eb",
+          backgroundColor: "#2563eb",
+          fill: false,
+          tension: 0.5,
+        },
+      ];
+    } else {
+      datasets = [
+        {
+          data: data, // Readings for the y-axis
+          label: "Systolic",
+          borderColor: "#2563eb",
+          backgroundColor: "#2563eb",
+          fill: false,
+          tension: 0.5,
+        },
+        {
+          data: data1, // Readings for the y-axis
+          label: "Diastolic",
+          borderColor: "#000000",
+          backgroundColor: "transparent",
+          tension: 0.5,
+        },
+      ];
+    }
+
+    chartRef.current = new Chart(ctx, {
+      type: "line",
+      data: {
+        labels, // Formatted timestamps for the x-axis
+        datasets: datasets,
+      },
+      options: {
+        scales: {
+          x: {
+            type: "time",
+            time: {
+              parser: "lll", // Make sure this matches your data format exactly
+              tooltipFormat: "ll HH:mm", // Format for tooltips
+              unit: "minute", // Focus on minutes for the unit
+              displayFormats: {
+                minute: "HH:mm" // Display format for minutes
+              },
+            },
+            grid: {
+              display: false,
+            },
+            ticks: {
+              autoSkip: true,
+              maxRotation: 45,
+              maxTicksLimit: 5, // Adjust this to allow more ticks if necessary
+              major: {
+                enabled: true // This will make the first tick appear when autoSkip is true
+              }
+            },
+          },
+          y: {
+            type: "linear",
+            min: 0,
+            ticks: {
+              stepSize : 10,
+              maxTicksLimit: 10,
+            },
+            beginAtZero: true,
+            grid: {
+              display: false,
+            },
+          },
+        },
+      },
+    });
+  }
 
   //
 
@@ -356,7 +492,7 @@ export default function Page() {
                   <Button
                     key={date}
                     className=" px-2  cursor-pointer"
-                    variant = {`${selectedDate === date ? '' : 'secondary'}`}
+                    variant={`${selectedDate === date ? "" : "secondary"}`}
                     onClick={() => setSelectedDate(date)}
                   >
                     {date}
@@ -374,14 +510,20 @@ export default function Page() {
             {Object.keys(filteredReadings).map((sensorKey) => {
               return (
                 <TabsContent key={sensorKey} value={sensorKey}>
-                  <div className="flex justify-between flex-col bg-[#F9F9F9] rounded-xl p-2 pt-0 gap-4 overflow-y-auto h-[20rem]">
-                    {renderReadings(sensorKey)}
+                  <div className="flex justify-between h-full w-full">
+                    <div className=" w-64 flex justify-between flex-col bg-[#F9F9F9] rounded-xl p-2 pt-0 gap-4 overflow-y-auto h-[20rem]">
+                      {renderReadings(sensorKey)}
+                    </div>
+                    <>
+                      {chart(selectedSensor)}
+                      <div className="w-[34rem] h-full border pt-0 rounded-xl  p-4">
+                        <canvas id="myChart" ref={chartContainerRef}></canvas>
+                      </div>
+                    </>
                   </div>
                 </TabsContent>
               );
             })}
-
-            <TabsContent value="bt">Bt</TabsContent>
           </div>
         </Tabs>
       </div>

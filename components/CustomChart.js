@@ -20,8 +20,8 @@ export default function CustomChart({ data, labels }) {
       {
         data: data, // Readings for the y-axis
         label: "Health Score",
-        borderColor: "#3e95cd",
-        backgroundColor: "#7bb6dd",
+        borderColor: "#2563eb",
+        backgroundColor: "#2563eb",
         fill: false,
       },
     ];
@@ -47,13 +47,13 @@ export default function CustomChart({ data, labels }) {
             ticks: {
               autoSkip: true, // Let Chart.js skip labels to prevent overlap
               maxRotation: 0, // Keep labels horizontal
-              maxTicksLimit: 15, // Adjust based on the size of your chart
+              maxTicksLimit: 5 // Adjust based on the size of your chart
             },
           },
           y: {
             type: "linear",
             min: 0,
-            max: 200,
+            max: 20,
             beginAtZero: true,
           },
         },
