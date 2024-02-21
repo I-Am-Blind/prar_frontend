@@ -9,6 +9,7 @@ import { commands } from "../../Sensor Config/commands";
 import { disconnectFromPort } from "../../Sensor Config/SerialFunctions";
 import { useRouter } from "next/navigation";
 import { UserDataManager } from "@/Config/userManager";
+import Link from "next/link";
 
 const BpSensorPopup = ({ heading, instructions, sensor_images, toast }) => {
   const [ino, setino] = useState(0);
@@ -188,11 +189,11 @@ const BpSensorPopup = ({ heading, instructions, sensor_images, toast }) => {
               >
                 Check Again
               </Button>
-              <Button className="w-44 h-12 shadow-lg shadow-blue-200 "
-              onClick = {()=>{router.push('/dashboard')}}
-              >
-                Done
-              </Button>
+              <Link href="/dashboard/alltests">
+                <Button className="w-44 h-12 shadow-lg shadow-blue-200 ">
+                  Done
+                </Button>
+              </Link>
             </div>
           </div>
         )}

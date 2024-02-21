@@ -8,6 +8,7 @@ import Image from "next/image";
 import speak from '@/public/assets/icons/speak.svg'
 import  { useRouter } from "next/navigation";
 import { UserDataManager } from "@/Config/userManager";
+import Link from "next/link";
 
 
 const BgSensorPopup = ({ heading, instructions, sensor_images, toast }) => {
@@ -117,6 +118,10 @@ const BgSensorPopup = ({ heading, instructions, sensor_images, toast }) => {
        disconnectFromPort(readerRef,portRef,isConnected)
     }
   }, [])
+
+
+
+  
   
 
   return (
@@ -163,11 +168,11 @@ const BgSensorPopup = ({ heading, instructions, sensor_images, toast }) => {
               >
                 Check Again
               </Button>
-              <Button className="w-44 h-12 shadow-lg shadow-blue-200 "
-              onClick = {()=>{router.push('/dashboard')}}
-              >
-                Done
-              </Button>
+              <Link href="/dashboard/alltests">
+                <Button className="w-44 h-12 shadow-lg shadow-blue-200 ">
+                  Done
+                </Button>
+              </Link>
             </div>
           </div>
         )}

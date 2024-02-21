@@ -8,7 +8,8 @@ import Reading from "./Reading";
 import { commands } from "../../Sensor Config/commands";
 import { disconnectFromPort } from "../../Sensor Config/SerialFunctions";
 import { UserDataManager } from "@/Config/userManager";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 const BpSensorPopup = ({ heading, instructions, sensor_images, toast }) => {
 
@@ -173,15 +174,17 @@ const BpSensorPopup = ({ heading, instructions, sensor_images, toast }) => {
             <Button
               className="w-44 h-12 shadow-xl shadow-gray-200 "
               variant="outline"
-              onClick={() => router.push('/dashboard/alltests/bloodpressure')}
+              onClick={() => {router.reload()}}
             >
               Check Again
             </Button>
+            <Link href='/dashboard/alltests'>
             <Button className="w-44 h-12 shadow-lg shadow-blue-200 "
-           onClick={() => router.push('/dashboard/alltests')}
             >
               Done
             </Button>
+            </Link>
+            
           </div>
         </div>
       )}
