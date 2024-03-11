@@ -2,12 +2,16 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import io from 'socket.io-client';
+
 // import CanvasAnimationPage from './ecg'; // Replace with your actual component path
 const CanvasAnimationPage = dynamic(
   () => import("./ecg"), // replace './YourComponent' with the path to your component
   { ssr: false }
 );
+
+
 
 const EcgPopupFrame = (props) => {
   const router = useRouter();
@@ -18,27 +22,181 @@ const EcgPopupFrame = (props) => {
   const [maxNumber, setMaxNumer] = useState({});
   const [dynamicProps, setDynamicProps] = useState({});
   const [optionSelected, setOptionSelected] = useState(null);
+  const socketRef = useRef(null); // Using ref to persist socket instance
+  const [ecgValue, setEcgValue] = useState(null); // Initial state
+
+
+const [mode,setMode]= useState({});
+    
+const [v1, setV1] = useState([]);
+const [v2, setV2] = useState([]);
+const [v3, setV3] = useState([]);
+const [v4, setV4] = useState([]);
+const [v5, setV5] = useState([]);
+const [v6, setV6] = useState([]);
+const [vii, setVii] = useState([]);
+const [vi, setVi] = useState([]); // Note: React state hooks should follow the camelCase naming convention
+
+
+  const SOCKET_URL = 'http://localhost:5005';
+
 
   useEffect(() => {
-    // Update dynamic properties based on the sequence number
-    setDynamicProps({
-      [`c${sequenceNumber}`]: "bg-[#FBC60C]",
-      img: `/vector-1886-${sequenceNumber}.svg`,
-      onExitClick: () => {
-        /* Define exit click handler here if needed */
-      },
-    });
-  }, [sequenceNumber]);
+    if (mainPage === 1 && showTestPage) {
+        setMode(1); 
+        setVii(currentVii => [...currentVii, ecgValue]);
+        console.log(vii); // Log here after the state update
+    }
+    // ... rest of the useEffect logic
+  }, [mainPage, showTestPage,ecgValue]);
+
+  useEffect(() => {
+    if (mainPage === 2 && showTestPage) {
+        setMode(2); // Assuming setMode is a state setter function
+        if (showTestPage) { // Check showTestPage once instead of in every condition
+          switch(sequenceNumber) {
+            case 1:
+              setV1(currentV1 => [...currentV1, ecgValue]);
+              console.log("v1:"+ v1)
+              break;
+            case 2:
+              setV2(currentV2 => [...currentV2, ecgValue]);
+              console.log("v2:"+ v2)
+              break;
+            case 3:
+              setV3(currentV3 => [...currentV3, ecgValue]);
+              console.log("v3:"+ v3)
+              break;
+            case 4:
+              setV4(currentV4 => [...currentV4, ecgValue]);
+              console.log("v4:"+ v4)
+              break;
+            case 5:
+              setV5(currentV5 => [...currentV5, ecgValue]);
+              console.log("v5:"+ v5)
+              break;
+            case 6:
+              setV6(currentV6 => [...currentV6, ecgValue]);
+              console.log("v6:"+ v6)
+              break;
+            case 7:
+              setVii(currentVii => [...currentVii, ecgValue]);
+              console.log("II:"+ vii)
+              break;
+            default:
+              // Handle any other case or do nothing
+          }
+        }
+    }
+  }, [mainPage, showTestPage, sequenceNumber, ecgValue]); // Include relevant dependencies
+
+
+  useEffect(() => {
+    if (mainPage === 3 && showTestPage) {
+        setMode(3); // Assuming setMode is a state setter function
+        if (showTestPage) { // Check showTestPage once instead of in every condition
+          switch(sequenceNumber) {
+            case 1:
+              setV1(currentV1 => [...currentV1, ecgValue]);
+              console.log("v1:"+ v1)
+              break;
+            case 2:
+              setV2(currentV2 => [...currentV2, ecgValue]);
+              console.log("v2:"+ v2)
+              break;
+            case 3:
+              setV3(currentV3 => [...currentV3, ecgValue]);
+              console.log("v3:"+ v3)
+              break;
+            case 4:
+              setV4(currentV4 => [...currentV4, ecgValue]);
+              console.log("v4:"+ v4)
+              break;
+            case 5:
+              setV5(currentV5 => [...currentV5, ecgValue]);
+              console.log("v5:"+ v5)
+              break;
+            case 6:
+              setV6(currentV6 => [...currentV6, ecgValue]);
+              console.log("v6:"+ v6)
+              break;
+            case 7:
+              setVii(currentVii => [...currentVii, ecgValue]);
+              console.log("II:"+ vii)
+              break;
+            case 8:
+              setVi(currentVi => [...currentVi, ecgValue]);
+              console.log("I:"+ vi)
+              break;
+            default:
+              // Handle any other case or do nothing
+          }
+        }
+    }
+  }, [mainPage, showTestPage, sequenceNumber, ecgValue]); // Include relevant dependencies
+  
+
+ 
+
+
+  useEffect(() => {
+    // Initialize socket connection
+    socketRef.current = io.connect(SOCKET_URL);
+
+    const handleEcgData = (receivedData) => {
+        const value = receivedData.data;
+        // console.log(value);
+        setEcgValue(value); // Update state with the new value
+
+        
+        // ecgTimeSeries.append(new Date().getTime(), value);
+    };
+
+
+    socketRef.current.on("ecg_data", handleEcgData);
+
+    SensorRead();
+
+    return () => {
+        SensorStop();
+        socketRef.current.off("ecg_data", handleEcgData);
+        socketRef.current.disconnect();
+    };
+}, []);
+
+const SensorStop = () => {
+  socketRef.current.emit("send_message_ecg", { message: "Stop" });
+};
+
+const SensorRead = () => {
+  socketRef.current.emit("send_message_ecg", { message: "Start" });
+};
+
+
+useEffect(() => {
+  // Update dynamic properties based on the sequence number
+  setDynamicProps({
+    [`c${sequenceNumber}`]: "bg-[#FBC60C]",
+    img: `/vector-1886-${sequenceNumber}.svg`,
+    onExitClick: () => {
+      /* Define exit click handler here if needed */
+    },
+  });
+}, [sequenceNumber]);
 
   const handleStartTest = () => {
     setShowTestPage(true);
-    setSequenceNumber((prevSequenceNumber) => {
-      if (sequenceNumber < maxNumber) {
-        return prevSequenceNumber + 1;
-      } else {
-        return prevSequenceNumber;
-      }
-    });
+  
+    // Delay the execution of the sequence number update
+    setTimeout(() => {
+      setSequenceNumber(prevSequenceNumber => {
+        if (sequenceNumber < maxNumber) {
+          return prevSequenceNumber + 1;
+        } else {
+          return prevSequenceNumber; // Keep the sequence number unchanged if it reaches maxNumber
+        }
+      });
+    }, 10100); // Delay of 10000 milliseconds (10 seconds)
   };
 
   useEffect(() => {
@@ -57,6 +215,7 @@ const EcgPopupFrame = (props) => {
   }, [showTestPage, sequenceNumber, maxNumber]);
 
   const selectOption1 = (option) => {
+    setMode(1);
     setSequenceNumber(7);
     setMaxNumer(7);
     setMainPage(1); // This will hide the selection page and show the ECG test page
@@ -328,7 +487,7 @@ const EcgPopupFrame = (props) => {
       {mainPage === 3 && (
        <>
             <b className="absolute top-[56px] left-center text-xl text-darkslategray-300">
-              2 Lead ECG Test
+              12 Lead ECG Test
             </b>
             <div className="absolute  top-0 left-0 right-0 bottom-0 mx-auto justify-center flex items-center w-[1024px] h-[600px]  text-left text-xs text-black font-manrope">
               <div className="absolute top-[122px] left-[40px] w-[944px] h-[49.3px] flex justify-around items-center">
@@ -485,8 +644,15 @@ const EcgPopupFrame = (props) => {
                 <button className="bg-blue-500 hover:bg-blue-700 text-white text-xl font-bold py-6 px-12 rounded-2xl">
                   Result
                 </button>
+              </div><div className="absolute top-[400px] left-[200px]">{v1}</div>
+              <div className="absolute top-[410px] left-[200px]">{v2}</div>
+              <div className="absolute top-[420px] left-[200px]">{v3}</div>
+              <div className="absolute top-[430px] left-[200px]">{v4}</div>
+              <div className="absolute top-[450px] left-[200px]">{v5}</div>
+              <div className="absolute top-[460px] left-[200px]">{v6}</div>
+              <div className="absolute top-[470px] left-[200px]">{vii}</div>
+              <div className="absolute top-[480px] left-[200px]">{vi}</div>
               </div>
-            </div>
         </>
       )}
         </div>
