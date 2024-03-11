@@ -125,13 +125,13 @@ export default function Page({ params }) {
   }, [params.slug]);
 
   return (
-    <main className="w-screen h-screen py-10 px-4 flex flex-col gap-2 items-start ">
+    <main className="w-screen h-screen pt-10 px-4 flex flex-col gap-2 items-start bg-slate-50  ">
         <div className="flex justify-center items-center">
-          <Image alt="initiate" src={left_arrow} />
-          <h2 className="text-xl capitalize font-semibold text-darkblue">{slugtourl[params.slug]}</h2>
+          <Image alt="initiate" src={left_arrow} className="w-6"/>
+          <h2 className="ml-4 text-lg capitalize font-semibold text-darkblue">{slugtourl[params.slug]}</h2>
         </div>
         <Button
-          className="h-[8rem] w-52 flex flex-col gap-2 items-end"
+          className="h-[7rem] w-52 flex flex-col gap-2 items-end bg-green1"
           onClick={() => {
             router.push("/dashboard/alltests/" + slugtourl[params.slug]);
           }}
@@ -145,8 +145,8 @@ export default function Page({ params }) {
             <Image alt="initiate" src={right_arrow} className="" />
           </div>
         </Button>
-      <div className="w-[50rem] h-max border border-gray-400 pt-0 rounded-xl shadow-xl p-4">
-        <canvas id="myChart" ref={chartContainerRef}></canvas>
+      <div className="w-full h-[23rem]  pt-0 rounded-xl shadow-lg p-4 shadow-gray-200 bg-white">
+        <canvas id="myChart" ref={chartContainerRef} className="h-full w-full"></canvas>
       </div>
     </main>
   );
