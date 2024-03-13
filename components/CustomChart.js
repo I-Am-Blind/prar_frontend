@@ -1,69 +1,91 @@
-"use client";
+import React, { useEffect, useState } from 'react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import moment from 'moment';
 
-import { useEffect, useState, useRef } from "react";
-import Chart from "chart.js/auto"; // Use 'chart.js/auto' for automatic element registration
-import "chartjs-adapter-moment";
-
-export default function CustomChart({ data, labels }) {
-  const chartRef = useRef(null); // Ref for chart instance
-  const chartContainerRef = useRef(null); // Ref for the canvas container
+export default function CustomRechart({ data, labels }) {
+  // Prepare the data format for Recharts
+  const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
-    if (!chartContainerRef.current) return;
+    const formattedData = data.map((value, index) => ({
+      date: labels[index], 
+      value : value?value:0,
+    }));
 
-    const ctx = chartContainerRef.current.getContext("2d");
-    if (chartRef.current) {
-      chartRef.current.destroy(); // Destroy the previous instance if it exists
+    setChartData(formattedData);
+  }, [data, labels]);
+
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div
+          className="custom-tooltip"
+          style={{
+            backgroundColor: "#ffff",
+            padding: "5px",
+            border: "1px solid #cccc",
+          }}
+        >
+          <p className="label">{`Time: ${moment(label).format("lll")}`}</p>
+          <p className="intro">{`Value: ${payload[0].value}`}</p>
+          {payload[1] && (
+            <p className="intro">{`Value: ${payload[1].value}`}</p>
+          )}
+        </div>
+      );
     }
-   console.log(data,labels)
-    const datasets = [
-      {
-        data: data, // Readings for the y-axis
-        label: "Health Score",
-        borderColor: "#2563eb",
-        backgroundColor: "#2563eb",
-        fill: false,
-      },
-    ];
 
-    chartRef.current = new Chart(ctx, {
-      type: "line",
-      data: {
-        labels, // Formatted timestamps for the x-axis
-        datasets: datasets,
-      },
-      options: {
-        scales: {
-          x: {
-            type: "time",
-            time: {
-              parser: "lll", // Adjust if necessary to match the input format
-              tooltipFormat: "ll HH:mm", // Display hours and minutes in tooltip
-              unit: "day", // Display labels in hourly increments
-              displayFormats: {
-                hour: "MMM D, hA", // Customize as needed (e.g., 'hA' for hourly labels like '3PM')
-              },
-            },
-            ticks: {
-              autoSkip: true, // Let Chart.js skip labels to prevent overlap
-              maxRotation: 0, // Keep labels horizontal
-              maxTicksLimit: 5 // Adjust based on the size of your chart
-            },
-          },
-          y: {
-            type: "linear",
-            min: 0,
-            max: 20,
-            beginAtZero: true,
-          },
-        },
-      },
-    });
-  }, []);
+    return null;
+  };
+
+
+  const CustomizedDot = (props) => {
+    const { cx, cy, stroke, payload, value } = props;
+  
+    if (value > 150) {
+      return (
+        <circle cx={cx} cy={cy} r={3} stroke={stroke} fill="#F21B1B" />
+      );
+    }
+  
+    return (
+      <circle cx={cx} cy={cy} r={3} stroke={stroke} fill="#6ACA79" />
+    );
+  };
+
 
   return (
-    <div className="w-full h-full border border-gray-400 pt-0 rounded-xl shadow-xl p-4">
-      <canvas id="myChart" ref={chartContainerRef}></canvas>
+    <div className="w-full h-full ">
+      <ResponsiveContainer>
+        <LineChart
+          data={chartData}
+
+        >
+          <CartesianGrid  vertical={false} stroke="#F0F0F0"/>
+            <XAxis
+              dataKey="date"
+              tickFormatter={(timeStr) => moment(timeStr).format("MMM D")}
+              tick={{ fontSize: 13, fill: 'black', fontWeight:'600' }} 
+              tickMargin={15}
+              axisLine={false}
+              tickLine={false}
+            />
+            <YAxis 
+            tick={{ fontSize: 13, fill: 'black', fontWeight:'600' }} 
+            tickMargin={15}
+            axisLine={false}
+            tickLine={false}
+            domain={[0, 20]}
+            />
+            <Tooltip content={<CustomTooltip />} />
+            <Line
+              type="monotone"
+              dataKey="value"
+              stroke="#e8eef0"
+              dot={<CustomizedDot />}
+            />
+        </LineChart>
+      </ResponsiveContainer>
     </div>
   );
 }

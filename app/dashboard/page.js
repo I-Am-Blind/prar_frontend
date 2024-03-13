@@ -93,11 +93,11 @@ export default function Dashboard() {
       <section className="top-section w-full h-[15%]">
         <DashboardSettings handleLogout={handleLogout} />
       </section>
-      <section className="middle-section w-full h-[40%] grid grid-cols-3 grid-rows-3 px-2 gap-4">
-        <div className="row-span-3 col-span-2 card-1 flex gap-4">
+      <section className="middle-section w-full h-[40%] grid grid-cols-3 grid-rows-3 px-2 gap-4 ">
+        <div className="row-span-3 col-span-2 card-1 flex gap-4 p-2 ">
           <div className="h-full w-[60%] flex flex-col items-start justify-center">
             <span className="w-full flex justify-between items-center">
-              <div className="label-1 w-max">Your health score</div>
+              <div className="label-1 w-max ml-4  text-[0.7rem]">Health score</div>
               <span className="flex gap-1 items-center justify-center">
                 {buttons.map((buttonValue) => (
                   <Button
@@ -113,7 +113,7 @@ export default function Dashboard() {
                 ))}
               </span>
             </span>
-            <span className="w-full rounded-2xl mt-2 h-full">
+            <span className="w-full  h-full mt-1">
               {score && labels && <CustomChart data={score} labels={labels} />}
             </span>
           </div>

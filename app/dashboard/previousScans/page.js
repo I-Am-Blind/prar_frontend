@@ -5,8 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useRef, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import moment from "moment";
-import "chartjs-adapter-moment";
-import Chart from "chart.js/auto";
+import SensorChart from "@/components/SensorChart"
 
 import arrow_left from "@/public/assets/left_small_arrow_blue.svg";
 import Image from "next/image";
@@ -19,8 +18,6 @@ export default function Page() {
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState({});
   const [currentTimeIndex, setCurrentTimeIndex] = useState(0);
-  const chartRef = useRef(null); // Ref for chart instance
-  const chartContainerRef = useRef(null);
 
   const [selectedSensor, setSelectedSensor] = useState("allreadings");
 
@@ -248,21 +245,21 @@ export default function Page() {
           <div className="mb-4 bg-white shadow-lg shadow-gray-100 rounded-xl p-4 flex gap-8">
             {otherReadings.map((reading, index) => (
               <div
-                key={index}
-                className="flex flex-col justify-center items-center"
-              >
-                <h4 className="text-sm text-gray-400 mb-2">
-                  {sensorHeadings[reading.sensorType]}
-                </h4>
-                <div className="flex-none">
-                  <p className="text-3xl text-bluetext font-bold">
-                    {reading.readings}
-                    <span className="text-sm">
-                      {sensorunit[reading.sensorType]}
-                    </span>
-                  </p>
-                </div>
+              key={index}
+              className="flex flex-col justify-center items-center"
+            >
+              <h4 className="text-sm text-gray-400 mb-2">
+                {sensorHeadings[reading.sensorType]}
+              </h4>
+              <div className="flex-none">
+                <p className="text-3xl text-bluetext font-bold">
+                  {reading.readings}
+                  <span className="text-sm">
+                    {sensorunit[reading.sensorType]}
+                  </span>
+                </p>
               </div>
+            </div>
             ))}
           </div>
         )}
@@ -329,6 +326,7 @@ export default function Page() {
             </button>
           )}
         </div>
+        
         {currentTimeReadings.map((reading, index) => (
           <div
             key={index}
@@ -351,114 +349,6 @@ export default function Page() {
     );
   }
 
-  function chart(sensor) {
-    const sensorReadings = readings[sensor];
-    let labels = [];
-    let data = [];
-    let data1 = [];
-    sensorReadings?.forEach((reading) => {
-      const timestamp = moment(
-        reading.timestamp,
-        "MMM DD, YYYY at h:mm:ss A Z"
-      ).format("lll");
-      labels.push(timestamp);
-      if (sensor !== "bp") {
-        data.push(reading.readings);
-      } else {
-        const [systolic, diastolic] = reading.readings
-          .split("/")
-          .map((value) => parseInt(value, 10));
-
-        if (typeof systolic === "number") data.push(systolic);
-        if (typeof diastolic === "number") data1.push(diastolic);
-      }
-    });
-
-    if (!chartContainerRef.current) return;
-
-    const ctx = chartContainerRef.current.getContext("2d");
-    if (chartRef.current) {
-      chartRef.current.destroy(); // Destroy the previous instance if it exists
-    }
-
-    let datasets;
-    if (sensor !== "bp") {
-      datasets = [
-        {
-          data: data, // Readings for the y-axis
-          label: "Readings",
-          borderColor: "#2563eb",
-          backgroundColor: "#2563eb",
-          fill: false,
-          tension: 0.5,
-        },
-      ];
-    } else {
-      datasets = [
-        {
-          data: data, // Readings for the y-axis
-          label: "Systolic",
-          borderColor: "#2563eb",
-          backgroundColor: "#2563eb",
-          fill: false,
-          tension: 0.5,
-        },
-        {
-          data: data1, // Readings for the y-axis
-          label: "Diastolic",
-          borderColor: "#000000",
-          backgroundColor: "transparent",
-          tension: 0.5,
-        },
-      ];
-    }
-
-    chartRef.current = new Chart(ctx, {
-      type: "line",
-      data: {
-        labels, // Formatted timestamps for the x-axis
-        datasets: datasets,
-      },
-      options: {
-        scales: {
-          x: {
-            type: "time",
-            time: {
-              parser: "lll", // Make sure this matches your data format exactly
-              tooltipFormat: "ll HH:mm", // Format for tooltips
-              unit: "minute", // Focus on minutes for the unit
-              displayFormats: {
-                minute: "HH:mm" // Display format for minutes
-              },
-            },
-            grid: {
-              display: false,
-            },
-            ticks: {
-              autoSkip: true,
-              maxRotation: 45,
-              maxTicksLimit: 5, // Adjust this to allow more ticks if necessary
-              major: {
-                enabled: true // This will make the first tick appear when autoSkip is true
-              }
-            },
-          },
-          y: {
-            type: "linear",
-            min: 0,
-            ticks: {
-              stepSize : 10,
-              maxTicksLimit: 10,
-            },
-            beginAtZero: true,
-            grid: {
-              display: false,
-            },
-          },
-        },
-      },
-    });
-  }
 
   //
 
@@ -514,12 +404,7 @@ export default function Page() {
                     <div className=" w-64 flex justify-between flex-col bg-[#F9F9F9] rounded-xl p-2 pt-0 gap-4 overflow-y-auto h-[20rem]">
                       {renderReadings(sensorKey)}
                     </div>
-                    <>
-                      {chart(selectedSensor)}
-                      <div className="w-[34rem] h-full border pt-0 rounded-xl  p-4">
-                        <canvas id="myChart" ref={chartContainerRef}></canvas>
-                      </div>
-                    </>
+                    <SensorChart sensorType={sensorKey} />
                   </div>
                 </TabsContent>
               );

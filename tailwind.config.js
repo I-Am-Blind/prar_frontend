@@ -24,6 +24,7 @@ module.exports = {
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         lightblack:"#393939",
+        graph_green_dot : "#6ACA79",
         tabbg:"#285BF4",
         tabtext:"#FFFFFF",
         green1 : '#1AB58F',
