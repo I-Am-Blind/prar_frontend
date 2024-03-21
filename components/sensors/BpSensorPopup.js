@@ -24,7 +24,6 @@ const BpSensorPopup = ({ heading, instructions, sensor_images, toast }) => {
   const sensorscompleted= useRef(false);
   const [sensorresults, setsensorresults] = useState([]);
   const userDataManager = new UserDataManager();
-  const router = useRouter();
 
   const readData = async () => {
     try {
@@ -171,13 +170,13 @@ const BpSensorPopup = ({ heading, instructions, sensor_images, toast }) => {
           </h1>
           <Reading results={sensorresults} userId={userDataManager.getAll().user?.id}  />
           <div className="buttons flex justify-center gap-4 w-full mt-4">
+            <Link href='/dashboard/alltests/bloodpressure'>
             <Button
               className="w-44 h-12 shadow-xl shadow-gray-200 "
               variant="outline"
-              onClick={() => {router.reload()}}
             >
               Check Again
-            </Button>
+            </Button></Link>
             <Link href='/dashboard/alltests'>
             <Button className="w-44 h-12 shadow-lg shadow-blue-200 "
             >

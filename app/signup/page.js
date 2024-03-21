@@ -15,15 +15,11 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import left_arrow from "@/public/assets/left_small_arrow_black.svg";
 
 import { Input } from "@/components/ui/input";
+import Link from "next/link";
+import Image from "next/image";
 
 
 
@@ -70,8 +66,12 @@ export default function Page() {
   }
 
   return (
-    <main className="w-screen h-screen">
-      <div className="flex justify-center items-center h-full w-full">
+    <main className="w-screen h-screen relative">
+      <Link href="/">    
+        <Image alt="initiate" src={left_arrow} className="w-6 absolute top-12 left-6" />
+      </Link>
+      <h2 className="absolute top-28 left-8 font-bold  text-xl">Enter your details to continue</h2>
+      <div className="flex justify-center items-center h-full w-full pt-16">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}

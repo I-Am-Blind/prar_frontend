@@ -19,6 +19,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { UserDataManager } from "@/Config/userManager";
 import Image from "next/image";
+import Link from "next/link";
+import left_arrow from "@/public/assets/left_small_arrow_black.svg";
 
 const formSchema = z.object({
   username: z.string().min(2).max(50),
@@ -59,13 +61,21 @@ export default function Page() {
 
   return (
     <main className="w-screen h-screen">
+      <Link href="/">    
+        <Image alt="initiate" src={left_arrow} className="w-6 absolute top-12 left-6" />
+      </Link>
       <div className="flex  justify-center items-center h-full w-full gap">
         <Image src={ausa_logo} alt="AUSA" className="w-[433px] h-[301px] -ml-32" />
         <div className="w-[1px] h-96 bg-gray-100 mr-12"></div>
+        <div className="flex flex-col gap-8 items-center">
+        <div className="flex flex-col gap-2">
+        <h2 className="font-bold text-xl">Sign In</h2>
+          <h2 className="text-gray-400 font-light text-sm">Please Enter your credentials to continue</h2>
+        </div>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-6 w-64 flex flex-col justify-center"
+            className="space-y-4 w-64 flex flex-col justify-center"
           >
             <FormField
               control={form.control}
@@ -94,6 +104,7 @@ export default function Page() {
             <Button type="submit">Sign In</Button>
           </form>
         </Form>
+        </div>
       </div>
     </main>
   );

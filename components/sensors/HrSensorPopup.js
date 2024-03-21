@@ -182,13 +182,13 @@ const BpSensorPopup = ({ heading, instructions, sensor_images, toast }) => {
             </h1>
             <Reading results={sensorresults} userId={userDataManager.getAll().user?.id}  />
             <div className="buttons flex justify-center gap-4 w-full mt-4">
+            <Link href='/dashboard/alltests/heartrate'>
             <Button
-                className="w-44 h-12 shadow-xl shadow-gray-200 "
-                variant="outline"
-                onClick = { () => { setstate('instructions') ; setino(0) } }
-              >
-                Check Again
-              </Button>
+              className="w-44 h-12 shadow-xl shadow-gray-200 "
+              variant="outline"
+            >
+              Check Again
+            </Button></Link>
               <Link href="/dashboard/alltests">
                 <Button className="w-44 h-12 shadow-lg shadow-blue-200 ">
                   Done
