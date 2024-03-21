@@ -19,6 +19,7 @@ export default function Page({ params }) {
     sp: "heartrate",
     hr: "heartrate",
     t: "temperature",
+    ecg:"ecg"
   };
 
  
@@ -26,7 +27,7 @@ export default function Page({ params }) {
 
   return (
     <main className="w-screen h-screen pt-10 px-4 flex flex-col gap-2 items-start bg-[#F6F6F6]  ">
-      <Link href="/dashboard">
+      <Link href="/dashboard/alltests">
       <div className="flex justify-center items-center">
         
         <Image alt="initiate" src={left_arrow} className="w-6" />

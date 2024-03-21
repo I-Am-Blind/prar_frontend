@@ -19,8 +19,13 @@ import ent from "@/public/assets/sensors/ent.svg"
 export default function Page() {
   const router = useRouter();
   const buttonLayout = (sensor,img,url)=>{
+    let fullurl
+    if (sensor !== 'ECG')
+      fullurl = '/dashboard/alltests/graph/' + url
+    else
+    fullurl = '/dashboard/alltests/' + url
     return (
-     <button className="card-1 px-6 flex justify-between  items-center w-96 h-20 " onClick={()=>{router.push('/dashboard/alltests/graph/' + url)}}>
+     <button className="card-1 px-6 flex justify-between  items-center w-96 h-20 " onClick={()=>{router.push(fullurl)}}>
       <span className="flex justify-center items-center gap-4">
         <Image src={img} alt={url} />
         <span className="text-lg font-bold text-primtext">{sensor}</span>
