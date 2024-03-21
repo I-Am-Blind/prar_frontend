@@ -20,6 +20,9 @@ import left_arrow from "@/public/assets/left_small_arrow_black.svg";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import Image from "next/image";
+import { useRef, useState } from "react";
+import Keyboard from "react-simple-keyboard";
+import "react-simple-keyboard/build/css/index.css";
 
 
 
@@ -60,10 +63,43 @@ export default function Page() {
         description: res.message,
         variant: "destructive",
       })
-    }
-    
-    
+    } 
   }
+
+   //keyboard stuff
+   const [keyboardVisible, setKeyboardVisible] = useState(false);
+   const activeInput = useRef("");
+   const ignoreBlur = useRef(true);
+ 
+   const onKeyPress = (button) => {
+     ignoreBlur.current = false;
+     if (button === "{enter}") {
+       form.handleSubmit(onSubmit)(); 
+       return; 
+     }
+     if (button === "{bksp}") {
+       const currentValue = form.getValues(activeInput.current);
+       const updatedValue = currentValue.slice(0, -1);
+       form.setValue(activeInput.current, updatedValue, {
+         shouldValidate: true,
+       });
+     } else {
+       const currentValue = form.getValues(activeInput.current);
+       const updatedValue = currentValue + button;
+       form.setValue(activeInput.current, updatedValue, {
+         shouldValidate: true,
+       });
+     }
+     setTimeout(() => {
+       ignoreBlur.current = true;
+     }, 100);
+   };
+ 
+   const handleBlur =() => {
+     ignoreBlur.current && setKeyboardVisible(false);
+   }
+   //
+
 
   return (
     <main className="w-screen h-screen relative">
@@ -89,6 +125,11 @@ export default function Page() {
                           type={field.type}
                           placeholder={field.placeholder}
                           {...formField}
+                          onFocus={() => {
+                            activeInput.current = field.name;
+                            setKeyboardVisible(true);
+                          }}
+                          onBlur={handleBlur}
                         />
                     </FormControl>
                     <FormMessage />
@@ -100,6 +141,17 @@ export default function Page() {
           </form>
         </Form>
       </div>
+      {keyboardVisible && (
+        <div className="absolute bottom-0 w-full  py-4 px-4  glass justify-center  glass-effect border-[1px] border-gray-200 rounded-xl flex flex-col gap-2 items-center ">
+          <span className="border-[1px] border-gray-400 rounded-lg px-4 py-1">{form.getValues(activeInput.current) ? form.getValues(activeInput.current) : "Your Input here" }</span>
+          <div className="flex gap-4 w-full">
+          <Keyboard onKeyPress={onKeyPress} />
+          <Button className="" onClick={() => setKeyboardVisible(false)}>
+            X
+          </Button>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

@@ -58,6 +58,11 @@
     @apply bg-background text-foreground;
   }
 
+  .glass-effect {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px); 
+  }
   .card-1{
     @apply bg-white rounded-2xl  shadow-lg shadow-slate-200 items-center p-6
   }
