@@ -28,7 +28,7 @@ export default function Home() {
 
     
     useEffect(() => {
-      const socket = io('https://ausa-tele-socket-server-production.up.railway.app/');
+      const socket = io('https://ausa-tele-socket-server.onrender.com/');
       socket.on('connect', () => {
           console.log('Connected to the server');
           socket.emit('message', 'Hello Server!');
